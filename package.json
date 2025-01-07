@@ -1,0 +1,45 @@
+{
+  "name": "fashi-ecommerce",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.9.6",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.3.1",
+    "@mui/material": "^6.3.1",
+    "@mui/styled-engine-sc": "^6.3.1",
+    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-icons": "^1.3.2",
+    "@radix-ui/react-popover": "^1.1.4",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@stripe/stripe-js": "^5.4.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
+    "embla-carousel-autoplay": "^8.5.1",
+    "embla-carousel-react": "^8.5.1",
+    "lucide-react": "^0.469.0",
+    "next": "15.1.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "stripe": "^17.5.0",
+    "styled-components": "^6.1.14",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
