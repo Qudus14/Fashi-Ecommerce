@@ -1,86 +1,108 @@
-// "use client"
+"use client";
 
-// import React from 'react';
-// import { useEffect, useState, useRef } from 'react';
-// import Autoplay from "embla-carousel-autoplay";
-// import {
-//   Carousel,
-//   CarouselContent,
-//   CarouselItem,
-//   CarouselNext,
-//   CarouselPrevious
-// } from "@/components/ui/carousel";
+import React, { useCallback, useEffect, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { motion } from "framer-motion"
+import Autoplay from 'embla-carousel-autoplay'
+import useEmblaCarousel from 'embla-carousel-react'
 
+const Hero = () => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000 })])
 
-// function Hero() {
-//   // const [products, setProducts]= useState([]);
-//   const plugin = useRef(
-//     Autoplay({ delay: 2000, stopOnInteraction: true })
-//   );
+  const heroItems = [
+    {
+      image: '/img/hero-1.jpg',
+      category: 'Bag,kids',
+      title: 'Black friday',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore',
+    },
+    {
+      image: '/img/hero-2.jpg',
+      category: 'Bag,kids',
+      title: 'Black friday',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore',
+    },
+  ]
 
-//   const heroData = [
-//     {
-//       img: 'img/hero-1.jpg',
-//       title: 'Black Friday',
-//       subtitle: 'Bag, kids',
-//       description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore',
-//       sale: '50%',
-//     },
-//     {
-//       img: 'img/hero-2.jpg',
-//       title: 'Black Friday',
-//       subtitle: 'Bag, kids',
-//       description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore',
-//       sale: '50%',
-//     },
-//     // Add more hero data objects as needed
-//   ];
+  const contentVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, staggerChildren: 0.2 } },
+  }
 
-//   return (
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  }
 
-//     <Carousel
-//     opt={{
-//       loop:true,
-//     }}
-//       plugins={[plugin.current]}
-//       className="w-full"
-//       onMouseEnter={plugin.current.stop}
-//       onMouseLeave={plugin.current.reset}
-//     >
-//       <CarouselContent>
-//         {heroData.slice(0, 2).map(heroData => (
-//           <CarouselItem key={heroData} className="relative">
-//             <div
-//               className=" p-0 m-0 relative w-full h-[500px] bg-cover bg-center object-contain"
-//               style={{ backgroundImage: `url(${heroData.img})` }}
-//             >
-//               <div className="absolute inset-0 bg-opacity-50 flex items-center">
-//                 <div className="container mx-auto px-4 pt-5">
-//                   <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
-//                     <div className="max-w-lg p-10">
-//                       <span className="text-md font-semibold text-customYellow">{heroData.title}</span>
-//                       <h1 className="text-4xl font-bold mt-2 text-black">${heroData.subtitle}</h1>
-//                       <p className="mt-4 text-lg text-black">{heroData.description}</p>
-//                       <a href="#" className="inline-block mt-4 px-6 py-3 bg-primary text-white font-semibold rounded">Shop Now</a>
-//                     </div>
-//                   </div>
-//                   <div className="absolute item-center border-1 bg-red-600 text-white py-2 px-4 rounded">
-//                     <h2 className="text-2xl font-bold">Sale <span className="text-3xl">${heroData.sale}</span></h2>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </CarouselItem>
-//         ))}
-//       </CarouselContent>
-//       <CarouselPrevious className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-//         <span className="text-gray-900">&lt;</span>
-//       </CarouselPrevious>
-//       <CarouselNext className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-//         <span className="text-gray-900">&gt;</span>
-//       </CarouselNext>
-//     </Carousel>  
-//     );
-// };
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return
+    setCurrentIndex(emblaApi.selectedScrollSnap())
+  }, [emblaApi])
 
-// export default Hero;
+  useEffect(() => {
+    if (!emblaApi) return
+    onSelect()
+    emblaApi.on('select', onSelect)
+    return () => emblaApi.off('select', onSelect)
+  }, [emblaApi, onSelect])
+
+  return (
+    <section className="hero-section relative">
+      <div className="embla" ref={emblaRef}>
+        <Carousel className="w-full">
+          <CarouselContent className="-ml-0">
+            {heroItems.map((item, index) => (
+              <CarouselItem key={index} className="pl-0 relative w-full">
+                <div className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-screen">
+                  <Image
+                    src={item.image}
+                    alt={`Hero ${index + 1}`}
+                    layout="fill"
+                    objectFit="cover"
+                    priority={index === 0}
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-40" />
+                  <div className="absolute inset-0 container mx-auto px-4 flex items-center">
+                    <motion.div 
+                      className="w-full md:w-2/3 lg:w-1/2 space-y-4 md:space-y-6"
+                      initial="hidden"
+                      animate={currentIndex === index ? "visible" : "hidden"}
+                      variants={contentVariants}
+                    >
+                      <motion.span variants={itemVariants} className="text-white text-sm md:text-lg inline-block">{item.category}</motion.span>
+                      <motion.h1 variants={itemVariants} className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">{item.title}</motion.h1>
+                      <motion.p variants={itemVariants} className="text-white text-sm md:text-base lg:text-lg">{item.description}</motion.p>
+                      <motion.div variants={itemVariants}>
+                        <Link href="#" className="inline-block bg-white text-black py-2 px-4 md:py-3 md:px-8 rounded-full hover:bg-gray-200 transition duration-300 text-sm md:text-base">
+                          Shop Now
+                        </Link>
+                      </motion.div>
+                    </motion.div>
+                  </div>
+                  <motion.div 
+                    className="absolute top-4 right-4 md:top-10 md:right-10 bg-red-600 text-white p-2 md:p-4 rounded-lg"
+                    initial={{ rotate: 0, scale: 0.8 }}
+                    animate={currentIndex === index ? { rotate: 12, scale: 1 } : { rotate: 0, scale: 0.8 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                  >
+                    <h2 className="text-lg md:text-2xl font-bold">
+                      Sale <span className="text-xl md:text-3xl">50%</span>
+                    </h2>
+                  </motion.div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-4 top-1/2 transform -translate-y-1/2" />
+          <CarouselNext className="absolute right-4 top-1/2 transform -translate-y-1/2" />
+        </Carousel>
+      </div>
+    </section>
+  )
+}
+
+export default Hero
+

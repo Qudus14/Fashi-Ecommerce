@@ -21,17 +21,17 @@ export default function AddToCart({ product }) {
     <div className="flex items-center space-x-2">
       {quantityInCart > 0 ? (
         <>
-          <Button className="bg-customYellow hover:bg-customYellow/90 text-white hover:text-white
+          <Button className="bg-customYellow rounded-full hover:bg-customYellow/90 text-white hover:text-white
           " onClick={handleRemoveFromCart} variant="outline" size="icon">
             -
           </Button>
           <span className="text-lg font-semibold">{quantityInCart}</span>
-          <Button className="bg-customYellow hover:bg-customYellow/90 text-white hover:text-white" onClick={handleAddToCart} variant="outline" size="icon">
+          <Button className="bg-customYellow rounded-full hover:bg-customYellow/90 text-white hover:text-white" onClick={handleAddToCart} variant="outline" size="icon">
             +
           </Button>
         </>
       ) : (
-        <Button className="bg-customYellow hover:bg-customYellow/90 text-white" onClick={handleAddToCart} variant="default">
+        <Button className="bg-customYellow rounded-full hover:bg-customYellow/90 text-white" onClick={handleAddToCart} variant="default">
           Add to Cart
         </Button>
       )}

@@ -1,18 +1,23 @@
 import { getMyOrders } from '@/app/orders/getMyOrders';
 import { formatCurrency } from '@/lib/formatCurrency';
-import { auth } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import React from 'react'
 
-export async function Orders() {
-  const { userId } = await auth();
+export const metadata = {
+  title: 'My Orders',
+  description: 'View your order history',
+};
+
+export default async function OrdersPage() {
+  const { userId } = auth();
 
   if (!userId) {
-    return redirect("/");
+    redirect("/");
   }
 
   const orders = await getMyOrders(userId);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="bg-white p-4 sm:p-8 rounded-xl shadow-lg w-full max-w-4xl">
@@ -129,6 +134,4 @@ export async function Orders() {
     </div>
   );
 }
-
-export default Orders;
 

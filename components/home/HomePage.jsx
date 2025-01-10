@@ -1,13 +1,15 @@
 import React from 'react'
-import Hero from './Hero'
 import Banner from './Banner'
+import Hero from './Hero'
+import Footer from '../public/Footer'
 
 
 function HomePage() {
   return (
     <div>
-      {/* <Hero/> */}
+      <Hero/>
       <Banner/>
+      <Footer/>
     </div>
   )
 }
