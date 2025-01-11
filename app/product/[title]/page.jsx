@@ -1,10 +1,11 @@
+import {Footer} from "@/components/public/Footer"
 import ProductDetail from "@/lib/fetchProduct"
 async function fetchProductDetails(productTitle) {
   const url = `https://real-time-product-search.p.rapidapi.com/search?q=${encodeURIComponent(productTitle)}`
   const options = {
     method: 'GET',
     headers: {
-      'x-rapidapi-key': 'cf7320b6d2msh8734c6317a1bd89p1c468ejsn4b0d0f62e427',
+      'x-rapidapi-key': 'c33309897bmshd54c1f6871f1eaap1f9b20jsn1b4baab8df5f',
       'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
     }
   }
@@ -39,9 +40,12 @@ export default async function ProductPage({ params }) {
   }
 
   return (
+    <>
     <main className="container mx-auto px-4 py-8">
       <ProductDetail product={productData} />
     </main>
+    <Footer/>
+    </>
   )
 }
 

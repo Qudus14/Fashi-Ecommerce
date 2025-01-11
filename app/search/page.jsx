@@ -1,7 +1,6 @@
 import SearchResults from '@/lib/fetchSearch'
 import { Suspense } from 'react'
 import Loading from './loading'
-import SidebarPage from './Sidebar'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,35 +9,31 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { headers } from 'next/headers';
+import Footer from '@/components/public/Footer';
 
 export default async function SearchPage({ searchParams }) {
   const searchTerm = searchParams.q || '';
 
   return (
-    <main className="container mx-auto px-1 py-4">
+    <>
+    <main className="container mx-auto px-1 py-12">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            <BreadcrumbLink className="text-black font-bold text-xl" href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+            <BreadcrumbPage className="text-gray-500 font-bold text-xl">{searchTerm}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1>Search Results for: {searchTerm}</h1>
+      <h1 className="font-bold text-lg py-6">Search Results for: {searchTerm}</h1>
       <Suspense fallback={<Loading/>}>
-        <div className='flex space-x-1'>
-          <SidebarPage/>
           <SearchResults searchTerm={searchTerm} />
-        </div>
       </Suspense>
     </main>
+    <Footer/>
+    </>
   );
 }

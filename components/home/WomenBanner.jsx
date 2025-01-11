@@ -26,6 +26,10 @@ const WomenBanner = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const { cart } = useCartStore()
+   
+  const handleClick = () => {
+    router.push(`/search?q=${encodeURIComponent("Women's")}`)
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,7 +39,7 @@ const WomenBanner = () => {
       const options = {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': '0636af3412mshc4ade4adc482543p108907jsnfc18649145fd',
+          'x-rapidapi-key': 'b69689afe6msh644a34a44e73cf1p194223jsn54a65869c476',
           'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
         }
       }
@@ -67,7 +71,12 @@ const WomenBanner = () => {
     <section className="py-16 px-14">
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">
-          <div className="w-full lg:w-1/3 px-4 mb-8 lg:mb-0">
+          <div className="w-full lg:w-1/3 px-4 mb-8 lg:mb-0 cursor-pointer group"
+            onClick={handleClick}
+            onKeyDown={(e) => e.key === 'Enter' && handleClick()}
+            tabIndex={0}
+            role="button"
+            aria-label="Discover Men's Collection">
             <div className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('img/products/women-large.jpg?height=500&width=400')"}}>
               <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white">
                 <h2 className="text-4xl font-bold mb-4">Women's</h2>

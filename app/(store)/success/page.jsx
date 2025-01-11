@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/public/Footer";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store";
 import Link from "next/link";
@@ -18,6 +19,7 @@ function SuccessPage(){
     },[orderNumber, clearCart]);
 
     return(
+        <>
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
             <div className="bg-white p-12 rounded-xl shadow-lg max-w-2xl w-full mx-4">
                 <div className="flex justify-center mb-8">
@@ -61,6 +63,8 @@ function SuccessPage(){
             </div>
         </div>
         </div>
+        <Footer/>
+        </>
     )
 }
 

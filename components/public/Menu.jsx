@@ -1,45 +1,62 @@
 "use client"
 
 import { useState } from 'react'
+import { Command, Folder, ChevronRight, ChevronsUpDown, BadgeCheck, CreditCard, Bell, Sparkles, LogOut, MenuIcon } from 'lucide-react'
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    avatar: 'https://placehold.co/60x60',
   },
+  projects: [
+    {
+      name: 'Project 1',
+      url: '/project1',
+      icon: Folder,
+    },
+    {
+      name: 'Project 2',
+      url: '/project2',
+      icon: Folder,
+    },
+  ],
   navMain: [
     {
-      title: "Collections",
-      url: "#",
+      title: 'Dashboard',
+      url: '/dashboard',
       icon: Command,
       isActive: true,
       items: [
-        { title: "Women`s", url: "#" },
-        { title: "Men`s", url: "#" },
-        { title: "Kid`s", url: "#" },
+        { title: 'Overview', url: '/dashboard/overview' },
+        { title: 'Analytics', url: '/dashboard/analytics' },
       ],
     },
-    // Add more navigation items as needed
     {
-      title: "Pages",
-      url: "#",
-      icon: Command,
-      isActive: true,
+      title: 'Settings',
+      url: '/settings',
+      icon: ChevronsUpDown,
+      isActive: false,
       items: [
-        { title: "Shopping Cart", url: "#" },
-        { title: "Blog Details", url: "#" },
-        { title: "Checkout", url: "#" },
+        { title: 'Profile', url: '/settings/profile' },
+        { title: 'Security', url: '/settings/security' },
       ],
     },
-  ],
-  projects: [
-    { name: "Home", url: "#", icon: Folder },
-    { name: "Shop", url: "#", icon: Folder },
   ],
   navSecondary: [
-    { title: "Contact", url: "#", icon: Folder },
-    { title: "Settings", url: "#", icon: ChevronRight },
+    {
+      title: 'Help',
+      url: '/help',
+      icon: Bell,
+    },
+    {
+      title: 'About',
+      url: '/about',
+      icon: Sparkles,
+    },
   ],
 }
 
@@ -67,7 +84,7 @@ const Menu = () => {
               <h2 className="text-lg font-semibold">FASHI</h2>
             </div>
           </div>
-       </div>
+        </div>
 
         <div className="mt-6">
           <ul className="space-y-1">
@@ -90,7 +107,7 @@ const Menu = () => {
                   <item.icon className="mr-1 h-4 w-4" />
                   <span>{item.title}</span>
                 </div>
-                <ChevronRight className=" ml-1 h-4 w-4" />
+                <ChevronRight className="ml-1 h-4 w-4" />
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <ul className="ml-0 space-y-0">
@@ -106,8 +123,6 @@ const Menu = () => {
             </Collapsible>
           ))}
         </nav>
-
-  
 
         <div className="mt-auto pt-2">
           <ul className="space-y-1">
@@ -171,9 +186,9 @@ const Menu = () => {
       ></div>
 
       {/* Main Content */}
-      <div className={`flex-1 p-4 transition-all duration-300 ${isOpen ? 'ml-0' : 'ml-0'}`}>
-        <button onClick={toggleSidebar} className="bg-customYellow flex text-white  px-3 py-2 rounded lg:hidden">
-        <i className="ti-menu mr-2"><MenuIcon /></i>
+      <div className={`flex-1 p-4 transition-all duration-300 ${isOpen ? 'ml-64' : 'ml-0'}`}>
+        <button onClick={toggleSidebar} className="bg-customYellow flex text-white px-3 py-2 rounded lg:hidden">
+          <MenuIcon className="mr-2" />
         </button>
       </div>
     </div>

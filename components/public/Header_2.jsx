@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-// import Menu from './Menu';
+import Menu from './Menu';
 
 function Header_2() {
   const[searchTerm, setSearchTerm]= useState('')
@@ -83,7 +83,6 @@ function Header_2() {
           {isSignedIn ? (
             <Link href="/orders" className="flex border space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded">
               <Package className="w-6 h-6 items-center text-white" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">1</span>
               <span className="text-white">My Orders</span>
             </Link>
             ) : (
@@ -96,7 +95,7 @@ function Header_2() {
           </li>
         </ul>
         {/* Menu button */}
-        {/* <Menu /> */}
+        <Menu />
       </div>
     </div>
   </div>

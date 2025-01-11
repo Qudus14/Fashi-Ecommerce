@@ -12,20 +12,16 @@ const Ig_Photo = () => {
     ];
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-0 lg:-mx-12 sm:-mx-0 pr-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-0">
             {photos.map(photo => (
                 <div
                     key={photo.id}
-                    className="relative bg-cover bg-center h-64 sm:h-64 lg:h-80 group hover:bg-slate-800 "
+                    className="relative bg-cover bg-center h-64 sm:h-64 lg:h-80 group hover:bg-slate-800"
                     style={{ backgroundImage: `url(${photo.imgSrc})` }}
                 >
-                    <div className="absolute inset-x-0 top-1/2 flex items-center justify-center bg-opacity-50 opacity-0 group-hover:opacity-100
-                     transition-all duration-300 ease-in-out translate-y-full group-hover:translate-y-0">
-                        <div className="text-white text-center flex flex-col items-center ">
-                        <InstagramIcon fontSize="large" className=" transition-colors duration-300 ease-in-out" />
-                            <h5 className="mt-2">
-                                <a href="#" className="transition-colors duration-300 ease-in-out">{photo.alt}</a>
-                            </h5>
+                    <div className="absolute inset-0 top-1/2 flex items-center justify-center bg-opacity-50 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out translate-y-full group-hover:translate-y-0">
+                        <div className="text-white text-center flex flex-col items-center">
+                            <InstagramIcon fontSize="large" className="bg-black bg-opacity-50 transition-colors duration-300 ease-in-out" />
                         </div>
                     </div>
                 </div>

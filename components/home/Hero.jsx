@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
 
@@ -66,21 +66,27 @@ const Hero = () => {
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-40" />
                   <div className="absolute inset-0 container mx-auto px-4 flex items-center">
-                    <motion.div 
-                      className="w-full md:w-2/3 lg:w-1/2 space-y-4 md:space-y-6"
-                      initial="hidden"
-                      animate={currentIndex === index ? "visible" : "hidden"}
-                      variants={contentVariants}
-                    >
-                      <motion.span variants={itemVariants} className="text-white text-sm md:text-lg inline-block">{item.category}</motion.span>
-                      <motion.h1 variants={itemVariants} className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">{item.title}</motion.h1>
-                      <motion.p variants={itemVariants} className="text-white text-sm md:text-base lg:text-lg">{item.description}</motion.p>
-                      <motion.div variants={itemVariants}>
-                        <Link href="#" className="inline-block bg-white text-black py-2 px-4 md:py-3 md:px-8 rounded-full hover:bg-gray-200 transition duration-300 text-sm md:text-base">
-                          Shop Now
-                        </Link>
-                      </motion.div>
-                    </motion.div>
+                    <AnimatePresence>
+                      {currentIndex === index && (
+                        <motion.div 
+                          className="w-full md:w-2/3 lg:w-1/2 space-y-4 md:space-y-6"
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          variants={contentVariants}
+                          key={index}
+                        >
+                          <motion.span variants={itemVariants} className="text-white text-sm md:text-lg inline-block">{item.category}</motion.span>
+                          <motion.h1 variants={itemVariants} className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">{item.title}</motion.h1>
+                          <motion.p variants={itemVariants} className="text-white text-sm md:text-base lg:text-lg">{item.description}</motion.p>
+                          <motion.div variants={itemVariants}>
+                            <Link href="#" className="inline-block bg-white text-black py-2 px-4 md:py-3 md:px-8 rounded-full hover:bg-gray-200 transition duration-300 text-sm md:text-base">
+                              Shop Now
+                            </Link>
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                   <motion.div 
                     className="absolute top-4 right-4 md:top-10 md:right-10 bg-red-600 text-white p-2 md:p-4 rounded-lg"

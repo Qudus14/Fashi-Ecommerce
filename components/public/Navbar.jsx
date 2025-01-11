@@ -28,10 +28,10 @@ const Navbar = () => {
             <Link href="/" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/') ? 'bg-customYellow' : ''}`}>
               Home
             </Link>
-            <Link href="/about" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/about') ? 'bg-customYellow' : ''}`}>
-              About
+            <Link href="/shop" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/shop') ? 'bg-customYellow' : ''}`}>
+              Shop
             </Link>
-            <Link href="/contact" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/contact') ? 'bg-customYellow' : ''}`}>
+            <Link href="/contacts" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/contact') ? 'bg-customYellow' : ''}`}>
               Contact
             </Link>
             <div className="w-px h-10 bg-gray-300 self-center"></div>
@@ -44,10 +44,10 @@ const Navbar = () => {
               </button>
               <ul className="absolute z-10 left-0 mt-1 w-44 bg-gray-800 hidden group-hover:block">
                 <li className="px-4 py-2 hover:bg-customYellow text-white hover:text-white cursor-pointer">
-                  <Link href="/shopping-cart">Shopping Cart</Link>
+                  <Link href="/basket">Basket</Link>
                 </li>
                 <li className="px-4 py-2 hover:bg-customYellow text-white hover:text-white cursor-pointer">
-                  <Link href="/checkout">Checkout</Link>
+                  <Link href="/orders">My Order</Link>
                 </li>
               </ul>
             </div>

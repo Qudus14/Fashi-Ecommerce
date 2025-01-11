@@ -4,6 +4,7 @@ import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import {useRouter} from "next/navigation";
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -21,30 +22,46 @@ import {
 
 const frameworks = [
   {
-    value: "next.js",
-    label: "Next.js",
+    value: "Clothings",
+    label: "Clothings",
   },
   {
-    value: "sveltekit",
-    label: "SvelteKit",
+    value: "Footwear",
+    label: "Footwear",
   },
   {
-    value: "nuxt.js",
-    label: "Nuxt.js",
+    value: "Grooming and Accessories",
+    label: "Grooming and Accessories",
   },
   {
-    value: "remix",
-    label: "Remix",
+    value: "Electronics and Gadgets",
+    label: "Electronics and Gadgets",
   },
   {
-    value: "astro",
-    label: "Astro",
+    value: "Health and Wellness",
+    label: "Health and Wellness",
+  },
+  {
+    value: "Home and Kitchen",
+    label: "Home and Kitchen",
   },
 ]
 
 export function CategorySelectorComponent() {
+  const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
+
+  const handleSelect = (currentValue) => {
+    setValue(currentValue === value ? "" : currentValue)
+    setOpen(false)
+    router.push(`/search?q=${encodeURIComponent(currentValue)}`)
+  }
+
+  const handleSearch = (searchValue) => {
+    router.push(`/search?q=${encodeURIComponent(searchValue)}`)
+  }
+
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -57,7 +74,7 @@ export function CategorySelectorComponent() {
         >
           {value
             ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            : "Select category..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0" />
         </Button>
       </PopoverTrigger>
@@ -66,18 +83,20 @@ export function CategorySelectorComponent() {
           <CommandInput 
           placeholder="Search category..."
           className="h-9"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch(e.currentTarget.value)
+            }
+          }}
            />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No category found.</CommandEmpty>
             <CommandGroup>
               {frameworks.map((framework) => (
                 <CommandItem
                   key={framework.value}
                   value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                  }}
+                  onSelect={handleSelect}
                 >
                   {framework.label}
                   <Check

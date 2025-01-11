@@ -1,4 +1,5 @@
 import { getMyOrders } from '@/app/orders/getMyOrders';
+import Footer from '@/components/public/Footer';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
@@ -19,6 +20,7 @@ export default async function OrdersPage() {
   const orders = await getMyOrders(userId);
 
   return (
+    <>
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="bg-white p-4 sm:p-8 rounded-xl shadow-lg w-full max-w-4xl">
         <h1 className="text-4xl font-bold text-gray-900 tracking-tight mb-8">
@@ -132,6 +134,8 @@ export default async function OrdersPage() {
         )}
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

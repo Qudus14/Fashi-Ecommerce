@@ -70,7 +70,7 @@ function Banner() {
       <WomenBanner/>
       <DealSection/>
       <MenBanner/>
-      {/* <Ig_Photo/> */}
+      <Ig_Photo/>
       <Blog/>
     </div>
   );

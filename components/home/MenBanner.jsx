@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Heart} from 'lucide-react'
+import { Heart } from 'lucide-react'
 import {
   Carousel,
   CarouselContent,
@@ -17,7 +17,7 @@ import AddToCart from '../public/AddToCart'
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
 
-const categories = ['Clothings', 'HandBag', 'Shoes', 'Accessories']
+const categories = ['Electronics', 'Watches', 'Shoes', 'Sports and fitness']
 
 const MenBanner = () => {
   const router = useRouter()
@@ -27,6 +27,10 @@ const MenBanner = () => {
   const [error, setError] = useState(null)
   const { cart } = useCartStore()
 
+  const handleClick = () => {
+    router.push(`/search?q=${encodeURIComponent("Men's")}`)
+  }
+
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true)
@@ -35,7 +39,7 @@ const MenBanner = () => {
       const options = {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': '0636af3412mshc4ade4adc482543p108907jsnfc18649145fd',
+          'x-rapidapi-key': 'b69689afe6msh644a34a44e73cf1p194223jsn54a65869c476',
           'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
         }
       }
@@ -139,13 +143,23 @@ const MenBanner = () => {
               </Carousel>
             )}
           </div>
-          <div className="w-full lg:w-1/3 px-4 mt-8 lg:mt-0">
-            <div className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('img/products/man-large.jpg?height=500&width=400')"}}>
-              <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white">
+          <div 
+            className="w-full lg:w-1/3 px-4 mt-8 lg:mt-0 cursor-pointer group"
+            onClick={handleClick}
+            onKeyDown={(e) => e.key === 'Enter' && handleClick()}
+            tabIndex={0}
+            role="button"
+            aria-label="Discover Men's Collection"
+          >
+            <div 
+              className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat transition-all duration-300 group-hover:opacity-90" 
+              style={{backgroundImage: "url('img/products/man-large.jpg?height=500&width=400')"}}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white transition-all duration-300 group-hover:bg-opacity-50">
                 <h2 className="text-4xl font-bold mb-4">Men's</h2>
-                <Link href="#" className="inline-block bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200 transition-colors">
+                <span className="inline-block bg-white text-black px-6 py-2 rounded-full group-hover:bg-gray-200 transition-colors">
                   Discover More
-                </Link>
+                </span>
               </div>
             </div>
           </div>
