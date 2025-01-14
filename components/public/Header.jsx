@@ -1,76 +1,109 @@
 "use client";
 
-import Link from 'next/link'
-import { Email, Instagram, PhoneOutlined, X } from '@mui/icons-material';
-import { Pinterest } from '@mui/icons-material';
-import { Facebook } from '@mui/icons-material';
-import { ClerkLoaded, SignInButton, UserButton, useUser  } from '@clerk/nextjs';
-import Header_2 from './Header_2';
+import { useCartStore } from '@/store';
+import { SignInButton, useAuth } from '@clerk/nextjs';
+import { Search,ShoppingCartIcon, Package } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
+import Menu from './Menu';
 import Navbar from './Navbar';
+
 function Header() {
-    const { user } = useUser ();
+  const[searchTerm, setSearchTerm]= useState('')
+  const router = useRouter(); // Correct position for router definition
+  const cart = useCartStore((state) => state.cart)
+  const [itemCount, setItemCount] = useState(0)
+  const {isSignedIn} = useAuth();
+
+
+  useEffect(() => {
+    const count = cart.reduce((total, item) => total + item.quantity, 0)
+    setItemCount(count)
+  }, [cart])
+
+
+  const handleClick=()=>{
+    router.push('/basket', {scroll: false})
+  }
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (searchTerm.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchTerm)}`)
+    }
+  };
 
   return (
-  <div className="sticky top-0 z-50 bg-white">
-      <header className="w-full border-b border-gray-200">
-        <div className="container mx-auto px-1 ">
-          <div className="flex items-center justify-between h-11">
-            {/* First item - hidden on small screens */}
-            <Link href="/" className="hidden sm:flex items-center text-gray-400 hover:text-gray-600">
-              <div className='flex items-center space-x-1'><Email fontSize='small' /><span>maqsoa2004@gmail.com</span></div>
-            </Link>
-            <div className="hidden sm:flex items-center border-r border-gray-200 h-full"></div>
-
-            <Link href="/about" className="hidden sm:flex items-center space-x-10 text-gray-400 hover:text-gray-600">
-              <div className='flex items-center space-x-1 '><PhoneOutlined fontSize='small' /><span>maqsoa2004@gmail.com</span></div>
-              <div className="flex space-x-5">
-                <Facebook className="hover:animate-bounce text-blue-600" />
-                <X className="hover:animate-bounce text-blue-400" />
-                <Instagram className="hover:animate-bounce text-pink-500" />
-                <Pinterest className="hover:animate-bounce text-red-600" />
-              </div>
-            </Link>
-            <div className="hidden sm:flex items-center border-r border-gray-200 h-full"></div>
-
-            <Link href="/" className="hidden sm:flex items-center text-gray-400 hover:text-gray-600">
-              <option
-                value="yt"
-                data-image="/img/flag-1.jpg"
-                data-imagecss="flag yt"
-                data-title="English"
-              >
-                English
-              </option>
-            </Link>
-            <div className="flex items-center border-r border-gray-200 h-full"></div>
-
-            {/* Fourth item - visible on all screens */}
-            <div className="flex items-center h-full pl-4 pr-3 md:pr-0 ">
-              <Link href="/contact" className="text-gray-800 hover:text-gray-600">
-                <ClerkLoaded>
-                  {user && (
-                    <link href='/'>
-
-                    </link>
-                  )}
-                  {user ? (
-                    <div className="flex items-center space-x-2">
-                      <UserButton width={200} height={200} />
-                      <div className="hidden sm:block text-xs font-bold">{user.fullName}</div>
-                    </div>
-                  ) : (
-                    <SignInButton mode='modal' />
-                  )}
-                </ClerkLoaded>
-              </Link>
-            </div>
-          </div>
+    <>
+    <div className="sticky top-0 z-50 bg-white w-full pt-2 border-b border-gray-200 justify-between sm:px-6 px-5 lg:px-8">
+    <div className="sm:pt-0 sm:pb-2 pb-1 md:pb-3 md:pt-0 flex flex-col items-center space-y-4 md:flex-row md:justify-between md:space-y-0">
+      
+      {/* Logo section */}
+      <div className="w-full text-center">
+        <div className="logo mx-auto">
+          <Link href="/">
+            <Image src="/img/logo.png" alt="Logo" width={80} height={95} className="mx-auto sm:pt-0" />
+          </Link>
         </div>
-      </header>
-      <Header_2 />
-      <Navbar />
+      </div>
+
+      {/* Search section */}
+      <div className="w-full px-4 md:px-0 text-center">
+        <form onSubmit={handleSubmit} className="flex items-center border-gray-400 border rounded-full w-full flex-1">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e)=>setSearchTerm(e.target.value)}
+            placeholder="What do you need?"
+            className="flex-1 px-4 rounded-l-full outline-none placeholder:text-sm"
+          />
+          <button type="submit">
+            <Search className="rounded-full h-10 px-2 w-10 bg-customYellow cursor-pointer" />
+          </button>
+        </form>
+      </div>
+
+      {/* Icons and Menu Section */}
+      <div className="w-full text-center flex items-center justify-between">
+        {/* Icon section */}
+        <ul className="ml-6 md:ml-14 flex items-center space-x-3">
+          <li className="relative">
+            <Link href="/basket" onClick={handleClick} className="flex border border-customYellow space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded">
+              <ShoppingCartIcon className="w-6 h-6 items-center text-white" />
+              {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              {itemCount}
+            </span>
+    )}
+              <span className="text-white">My Basket</span>
+            </Link>
+          </li>
+          <li className="relative group flex items-center">
+          {isSignedIn ? (
+            <Link href="/orders" className="flex border border-customYellow space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded">
+              <Package className="w-6 h-6 items-center text-white" />
+              <span className="text-white">My Orders</span>
+            </Link>
+            ) : (
+              <SignInButton mode="modal">
+                   <Link href="/orders" className="flex border border-customYellow space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded">
+                   <span className="text-white">Sign In</span>
+            </Link>
+              </SignInButton>
+            )}
+          </li>
+        </ul>
+        {/* Menu button */}
+        <Menu />
+      </div>
     </div>
-  )
+  </div>
+  <Navbar/>
+  </>
+  );
 }
 
-export default Header
+export default Header;

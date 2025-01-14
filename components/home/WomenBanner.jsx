@@ -111,7 +111,7 @@ const WomenBanner = () => {
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {products.map((product) => (
                     <CarouselItem key={product.product_id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                      <Card className="overflow-hidden">
+                      <Card className="overflow-hidden border-gray-200">
                         <CardContent className="p-0">
                           <div className="relative overflow-hidden group">
                             <Image 

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import banner_1 from '@/public/img/banner-1.jpg';
@@ -8,14 +10,19 @@ import DealSection from './DealSection';
 import MenBanner from './MenBanner';
 import WomenBanner from './WomenBanner';
 import Ig_Photo from './Ig_Photo';
+import { useRouter } from 'next/navigation';
 
 function Banner() {
+  const router=useRouter();
+  
   return (
-    <div className="banner-section py-12">
+    <div className="banner-section mb-6">
       <div className="container mx-auto">
         <div className="flex flex-wrap">
           <div className="w-full lg:w-1/3 p-2">
-            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105">
+            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105"  
+            onClick={() => router.push(`/search?q=${encodeURIComponent("Men's")}`)}
+            >
               <Image
                 src={banner_1}
                 alt="Men’s Banner"
@@ -32,7 +39,9 @@ function Banner() {
             </div>
           </div>
           <div className="w-full lg:w-1/3 p-2">
-            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105">
+            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105"
+            onClick={() => router.push(`/search?q=${encodeURIComponent("Women's")}`)}
+            >
               <Image
                 src={banner_2}
                 alt="Women’s Banner"
@@ -49,7 +58,9 @@ function Banner() {
             </div>
           </div>
           <div className="w-full lg:w-1/3 p-2">
-            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105">
+            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105"
+            onClick={() => router.push(`/search?q=${encodeURIComponent("Kid's")}`)}
+            >
               <Image
                 src={banner_3}
                 alt="Kid’s Banner"

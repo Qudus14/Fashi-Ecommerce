@@ -1,114 +1,164 @@
-"use client";
+"use client"
 
-import React, { useCallback, useEffect, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { motion, AnimatePresence } from "framer-motion"
-import Autoplay from 'embla-carousel-autoplay'
-import useEmblaCarousel from 'embla-carousel-react'
+import { useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import Autoplay from "embla-carousel-autoplay"
+import { motion } from "framer-motion"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel"
 
-const Hero = () => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000 })])
+const categories = [
+  "Home Appliances",
+  "Electronics",
+  "Furniture",
+  "Clothing",
+  "Sports & Outdoors",
+  "Beauty & Personal Care",
+  "Toys & Games"
+]
 
-  const heroItems = [
-    {
-      image: '/img/hero-1.jpg',
-      category: 'Bag,kids',
-      title: 'Black friday',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore',
-    },
-    {
-      image: '/img/hero-2.jpg',
-      category: 'Bag,kids',
-      title: 'Black friday',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore',
-    },
-  ]
-
-  const contentVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, staggerChildren: 0.2 } },
+const carouselItems = [
+  {
+    image: "/img/hero-1.jpg?height=600&width=800",
+    category: "Summer Collection",
+    title: "Refresh Your Wardrobe",
+    description: "Discover the hottest trends for the season",
+    discount: 25
+  },
+  {
+    image: "/img/hero-2.jpg?height=600&width=800",
+    category: "Tech Gadgets",
+    title: "Upgrade Your Devices",
+    description: "Find the latest innovations in technology",
+    discount: 25
+  },
+  {
+    image: "/img/hero-1.jpg?height=600&width=800",
+    category: "Home Decoration",
+    title: "Transform Your Space",
+    description: "Create the perfect ambiance for your home",
+    discount: 25
   }
+]
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return
-    setCurrentIndex(emblaApi.selectedScrollSnap())
-  }, [emblaApi])
-
-  useEffect(() => {
-    if (!emblaApi) return
-    onSelect()
-    emblaApi.on('select', onSelect)
-    return () => emblaApi.off('select', onSelect)
-  }, [emblaApi, onSelect])
+export default function Home() {
+  const router = useRouter()
+  const plugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: true })
+  )
 
   return (
-    <section className="hero-section relative">
-      <div className="embla" ref={emblaRef}>
-        <Carousel className="w-full">
-          <CarouselContent className="-ml-0">
-            {heroItems.map((item, index) => (
-              <CarouselItem key={index} className="pl-0 relative w-full">
-                <div className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-screen">
-                  <Image
-                    src={item.image}
-                    alt={`Hero ${index + 1}`}
-                    layout="fill"
-                    objectFit="cover"
-                    priority={index === 0}
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-40" />
-                  <div className="absolute inset-0 container mx-auto px-4 flex items-center">
-                    <AnimatePresence>
-                      {currentIndex === index && (
-                        <motion.div 
-                          className="w-full md:w-2/3 lg:w-1/2 space-y-4 md:space-y-6"
-                          initial="hidden"
-                          animate="visible"
-                          exit="hidden"
-                          variants={contentVariants}
-                          key={index}
-                        >
-                          <motion.span variants={itemVariants} className="text-white text-sm md:text-lg inline-block">{item.category}</motion.span>
-                          <motion.h1 variants={itemVariants} className="text-white text-3xl md:text-4xl lg:text-5xl font-bold">{item.title}</motion.h1>
-                          <motion.p variants={itemVariants} className="text-white text-sm md:text-base lg:text-lg">{item.description}</motion.p>
-                          <motion.div variants={itemVariants}>
-                            <Link href="#" className="inline-block bg-white text-black py-2 px-4 md:py-3 md:px-8 rounded-full hover:bg-gray-200 transition duration-300 text-sm md:text-base">
-                              Shop Now
-                            </Link>
-                          </motion.div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                  <motion.div 
-                    className="absolute top-4 right-4 md:top-10 md:right-10 bg-red-600 text-white p-2 md:p-4 rounded-lg"
-                    initial={{ rotate: 0, scale: 0.8 }}
-                    animate={currentIndex === index ? { rotate: 12, scale: 1 } : { rotate: 0, scale: 0.8 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                  >
-                    <h2 className="text-lg md:text-2xl font-bold">
-                      Sale <span className="text-xl md:text-3xl">50%</span>
-                    </h2>
-                  </motion.div>
-                </div>
-              </CarouselItem>
+    <div className="container mx-auto mb-0 px-2 py-0.5">
+      <div className="flex flex-col md:flex-row">
+        {/* Categories - Hidden on small screens */}
+        <div className="hidden md:block w-1/4 pr-0.5">
+          <h2 className="text-2xl font-bold mb-0.5 bg-customYellow text-white p-2">Categories</h2>
+          <ul className="space-y-1">
+            {categories.map((category) => (
+              <li
+                key={category}
+                className="p-2 hover:bg-customYellow text-base font-medium rounded cursor-pointer transition-colors"
+              >
+                {category}
+              </li>
             ))}
-          </CarouselContent>
-          <CarouselPrevious className="absolute left-4 top-1/2 transform -translate-y-1/2" />
-          <CarouselNext className="absolute right-4 top-1/2 transform -translate-y-1/2" />
-        </Carousel>
+          </ul>
+        </div>
+
+        {/* Carousel - Takes majority of the screen */}
+        <div className="w-full md:w-3/4">
+          <Carousel 
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            plugins={[plugin.current]}
+            onMouseEnter={plugin.current.stop}
+            onMouseLeave={plugin.current.reset}
+            className="w-full h-[60vh] md:h-[80vh]"
+          >
+            <CarouselContent className="-ml-0">
+              {carouselItems.map((item, index) => (
+                <CarouselItem key={index} className="pl-0">
+                  <Card className="h-full border-none rounded-none">
+                    <CardContent className="flex items-center justify-center p-0 h-full relative">
+                      <img
+                        src={item.image}
+                        alt={`Hero Image ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center">
+                        <div className="container mx-auto px-4">
+                          <div className="row">
+                            <motion.div 
+                              className="col-lg-5 text-white"
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.5, delay: 0.2 }}
+                            >
+                              <motion.span 
+                                className="text-3xl font-medium uppercase tracking-wider"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}
+                              >
+                                {item.category}
+                              </motion.span>
+                              <motion.h1 
+                                className="text-lg font-bold my-2"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.6 }}
+                              >
+                                {item.title}
+                              </motion.h1>
+                              <motion.p 
+                                className="mb-4 font-semibold text-base"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5, delay: 0.8 }}
+                              >
+                                {item.description}
+                              </motion.p>
+                                                            
+                              <motion.div 
+                                className="bg-customYellow hover:bg-customYellow/90 hover:text-gray-100 text-white px-4 py-2 inline-block cursor-pointer"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 1 }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => router.push(`/search?q=${encodeURIComponent(item.category)}`)}
+                              >
+                                Shop Now
+                              </motion.div>
+                            </motion.div>
+                          </div>
+                        </div>
+                        <motion.div 
+                          className="absolute top-4 right-4 bg-white text-black p-4 rounded-full"
+                          initial={{ scale: 0, rotate: -180 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ duration: 0.5, delay: 1.2, type: "spring" }}
+                        >
+                          <h2 className="text-lg font-bold">
+                            <span className="text-lg">Use code : <span className='text-red-600'>BFRIDAY</span> to get {item.discount}% OFF</span>
+                          </h2>
+                        </motion.div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
       </div>
-    </section>
+    </div>
   )
 }
-
-export default Hero
 

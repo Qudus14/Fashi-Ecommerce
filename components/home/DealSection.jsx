@@ -1,13 +1,19 @@
+"use client";
+
 import React from 'react';
-import timeBg from '@/public/img/time-bg.jpg'; // Replace with the correct path to your image
+import timeBg from '@/public/img/time-bg.jpg'; 
+import { useRouter } from 'next/navigation';
+import Deal from '../ui/countdown-timer';
 
 function DealSection() {
+  const router = useRouter();
+  
   return (
     <section
-      className="bg-cover bg-center h-[540px] py-16"
+      className="container mx-auto bg-cover bg-center h-[540px] py-16"
       style={{ backgroundImage: `url(${timeBg.src})` }}
     >
-      <div className="container mx-auto flex flex-col items-center h-full">
+      <div className="container flex flex-col items-center h-full">
         <div className="max-w-lg text-center">
           <div className="section-title mb-8">
             <h2 className="text-3xl font-bold mb-4">Deal Of The Week</h2>
@@ -20,26 +26,11 @@ function DealSection() {
             </div>
           </div>
           <div className="countdown-timer flex justify-center space-x-4 mb-8" id="countdown">
-            <div className="cd-item text-center">
-              <span className="text-4xl font-bold">56</span>
-              <p className="text-sm">Days</p>
-            </div>
-            <div className="cd-item text-center">
-              <span className="text-4xl font-bold">12</span>
-              <p className="text-sm">Hrs</p>
-            </div>
-            <div className="cd-item text-center">
-              <span className="text-4xl font-bold">40</span>
-              <p className="text-sm">Mins</p>
-            </div>
-            <div className="cd-item text-center">
-              <span className="text-4xl font-bold">52</span>
-              <p className="text-sm">Secs</p>
-            </div>
+            <Deal/>
           </div>
-          <a href="#" className="bg-primary text-white py-3 px-6 rounded-lg transition duration-300 hover:bg-opacity-80">
+          <div className="bg-customYellow hover:bg-customYellow/90 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 hover:bg-opacity-80" onClick={() => router.push(`/search?q=${encodeURIComponent("HandBag")}`)}>
             Shop Now
-          </a>
+          </div>
         </div>
       </div>
     </section>

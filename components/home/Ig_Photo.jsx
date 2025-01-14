@@ -16,12 +16,12 @@ const Ig_Photo = () => {
             {photos.map(photo => (
                 <div
                     key={photo.id}
-                    className="relative bg-cover bg-center h-64 sm:h-64 lg:h-80 group hover:bg-slate-800"
+                    className="relative bg-cover bg-center h-64 sm:h-64 lg:h-80 group hover:bg-slate-900"
                     style={{ backgroundImage: `url(${photo.imgSrc})` }}
                 >
-                    <div className="absolute inset-0 top-1/2 flex items-center justify-center bg-opacity-50 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out translate-y-full group-hover:translate-y-0">
+                    <div className="absolute inset-0 top-1/4 flex items-center justify-center bg-opacity-50 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out translate-y-full group-hover:translate-y-0">
                         <div className="text-white text-center flex flex-col items-center">
-                            <InstagramIcon fontSize="large" className="bg-black bg-opacity-50 transition-colors duration-300 ease-in-out" />
+                            <InstagramIcon fontSize="large" className="transition-colors duration-300 ease-in-out" />
                         </div>
                     </div>
                 </div>
