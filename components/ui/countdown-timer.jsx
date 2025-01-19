@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled, { createGlobalStyle, keyframes } from 'styled-components'
 
 const flipTop = keyframes`
@@ -112,12 +112,24 @@ const Deal = () => {
   })
 
   useEffect(() => {
-    const countToDate = new Date().setDate(new Date().getDate() + 30) 
+    const storedCountToDate = localStorage.getItem('countToDate');
+    const countToDate = storedCountToDate ? parseInt(storedCountToDate) : new Date().setDate(new Date().getDate() + 30);
+    
+    if (!storedCountToDate) {
+      localStorage.setItem('countToDate', countToDate.toString());
+    }
 
     const intervalId = setInterval(() => {
       const currentDate = new Date()
       const timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000)
       
+      if (timeBetweenDates <= 0) {
+        clearInterval(intervalId);
+        localStorage.removeItem('countToDate');
+        // Reset the countdown or handle the expiration as needed
+        return;
+      }
+
       const days = Math.floor(timeBetweenDates / 86400)
       const hours = Math.floor((timeBetweenDates % 86400) / 3600)
       const minutes = Math.floor((timeBetweenDates % 3600) / 60)

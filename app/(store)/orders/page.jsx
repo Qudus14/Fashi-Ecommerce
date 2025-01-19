@@ -1,4 +1,4 @@
-import { getMyOrders } from '@/app/orders/getMyOrders';
+import { getMyOrders } from '@/lib/getMyOrders';
 import Footer from '@/components/public/Footer';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { auth } from '@clerk/nextjs/server';
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export default async function OrdersPage() {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     redirect("/");
@@ -138,4 +138,3 @@ export default async function OrdersPage() {
     </>
   );
 }
-

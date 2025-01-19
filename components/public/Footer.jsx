@@ -1,13 +1,12 @@
 "use client";
 
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Twitter, Instagram, Pinterest } from '@mui/icons-material'
+import { Facebook, Twitter, Instagram } from 'lucide-react'
 
-const Footer = () => {
+export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-10">
@@ -23,7 +22,6 @@ const Footer = () => {
               <Facebook className="hover:animate-bounce text-blue-600" />
               <Twitter className="hover:animate-bounce text-blue-400" />
               <Instagram className="hover:animate-bounce text-pink-500" />
-              <Pinterest className="hover:animate-bounce text-red-600" />
             </div>
           </div>
           <div>
@@ -60,7 +58,4 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
-
-export default Footer;
-
+}

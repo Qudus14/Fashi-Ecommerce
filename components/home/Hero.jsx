@@ -10,15 +10,17 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel"
+import { Tv, Smartphone, Cpu, Sofa, ShirtIcon, ShoppingCart, Monitor, Baby, Dumbbell, Home, Sparkles, Gamepad2 } from 'lucide-react'
 
 const categories = [
-  "Home Appliances",
-  "Electronics",
-  "Furniture",
-  "Clothing",
-  "Sports & Outdoors",
-  "Beauty & Personal Care",
-  "Toys & Games"
+  { name: "Appliances", icon: Tv },
+  { name: "Phones & Tablets", icon: Smartphone },
+  { name: "Furniture", icon: Sofa },
+  { name: "Fashion", icon: ShirtIcon },
+  { name: "Computing", icon: Monitor },
+  { name: "Sports & Outdoors", icon: Dumbbell },
+  { name: "Beauty & Personal Care", icon: Sparkles },
+  { name: "Gaming", icon: Gamepad2 }
 ]
 
 const carouselItems = [
@@ -45,32 +47,32 @@ const carouselItems = [
   }
 ]
 
-export default function Home() {
+export default function Hero() {
   const router = useRouter()
   const plugin = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true })
+    Autoplay({ delay: 2500, stopOnInteraction: true })
   )
 
   return (
-    <div className="container mx-auto mb-0 px-2 py-0.5">
-      <div className="flex flex-col md:flex-row">
+    <div className="container mx-auto px-2">
+      <div className="flex flex-col md:flex-row md:h-[80vh]">
         {/* Categories - Hidden on small screens */}
-        <div className="hidden md:block w-1/4 pr-0.5">
-          <h2 className="text-2xl font-bold mb-0.5 bg-customYellow text-white p-2">Categories</h2>
+        <div className="hidden md:block border border-gray-200 rounded w-1/4 pr-1 h-full overflow-y-auto">
           <ul className="space-y-1">
             {categories.map((category) => (
               <li
-                key={category}
-                className="p-2 hover:bg-customYellow text-base font-medium rounded cursor-pointer transition-colors"
+                key={category.name}
+                className="p-2 hover:bg-customYellow text-base font-medium rounded cursor-pointer transition-colors flex items-center"
               >
-                {category}
+                <category.icon className="mr-2 h-5 w-5" />
+                {category.name}
               </li>
             ))}
           </ul>
         </div>
 
         {/* Carousel - Takes majority of the screen */}
-        <div className="w-full md:w-3/4">
+        <div className="w-full md:w-3/4 h-full">
           <Carousel 
             opts={{
               align: "start",
@@ -79,7 +81,7 @@ export default function Home() {
             plugins={[plugin.current]}
             onMouseEnter={plugin.current.stop}
             onMouseLeave={plugin.current.reset}
-            className="w-full h-[60vh] md:h-[80vh]"
+            className="w-full h-full"
           >
             <CarouselContent className="-ml-0">
               {carouselItems.map((item, index) => (
@@ -87,7 +89,7 @@ export default function Home() {
                   <Card className="h-full border-none rounded-none">
                     <CardContent className="flex items-center justify-center p-0 h-full relative">
                       <img
-                        src={item.image}
+                        src={item.image || "/placeholder.svg"}
                         alt={`Hero Image ${index + 1}`}
                         className="w-full h-full object-cover"
                       />

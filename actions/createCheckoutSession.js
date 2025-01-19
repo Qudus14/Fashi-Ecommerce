@@ -71,4 +71,3 @@ export async function createCheckoutSession(items, metadata) {
     throw error;
   }
 }
-

@@ -16,7 +16,7 @@ export default async function SearchPage({ searchParams }) {
 
   return (
     <>
-    <main className="container mx-auto px-1 py-12">
+    <main className="container mx-auto px-1 py-6">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -24,11 +24,11 @@ export default async function SearchPage({ searchParams }) {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-gray-500 font-bold text-xl">{searchTerm}</BreadcrumbPage>
+            <BreadcrumbPage className="text-gray-500 capitalize font-bold text-xl">{searchTerm}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="font-bold text-lg py-6">Search Results for: {searchTerm}</h1>
+      <h1 className="font-bold text-lg text-gray-500 capitalize py-3">Search Results for: {searchTerm}</h1>
       <Suspense fallback={<Loading/>}>
           <SearchResults searchTerm={searchTerm} />
       </Suspense>

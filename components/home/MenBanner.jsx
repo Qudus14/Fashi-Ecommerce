@@ -39,7 +39,7 @@ const MenBanner = () => {
       const options = {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': 'b69689afe6msh644a34a44e73cf1p194223jsn54a65869c476',
+          'x-rapidapi-key': '0cfc7c25fdmsh4650e00f2123e19p1e54a2jsn2ee1b53ae792',
           'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
         }
       }

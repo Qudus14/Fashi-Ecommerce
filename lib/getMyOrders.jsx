@@ -1,4 +1,4 @@
-import { backendClient } from "@/lib/backendClient";
+import { backendClient } from "./backendClient"
 
 export async function getMyOrders(userId) {
     if (!userId) {
@@ -21,4 +21,3 @@ export async function getMyOrders(userId) {
         throw new Error("Error fetching orders");
     }
 }
-

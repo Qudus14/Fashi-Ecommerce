@@ -18,7 +18,7 @@ export default function Navbar(){
   };
   
     return(
-        <nav className="bg-gray-900 shadow-md p-1 mb-0">
+        <nav className="sticky top-16 z-50 bg-gray-900 shadow-md p-1 mb-0">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4 md:ml-4 ml-0">
                 <CategorySelectorComponent/>
@@ -61,7 +61,7 @@ export default function Navbar(){
                   {user ? (
                     <div className="flex items-center space-x-2">
                       <UserButton width={200} height={200} />
-                      <div className="hidden sm:block text-xs font-bold">{user.fullName}</div>
+                      <div className="hidden text-gray-200 sm:block text-xs font-bold">{user.fullName}</div>
                     </div>
                   ) : (
                     <SignInButton className="bg-customYellow text-white p-2"  mode='modal' />
