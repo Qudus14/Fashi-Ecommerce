@@ -18,17 +18,14 @@ export default function Navbar(){
   };
   
     return(
-        <nav className="sticky top-16 z-50 bg-gray-900 shadow-md p-1 mb-0">
+        <nav className="lg:sticky hidden md:block md:top-16 z-50 bg-gray-900 shadow-md p-1 mb-0">
             <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4 md:ml-4 ml-0">
-                <CategorySelectorComponent/>
-              </div>
-          <div className="hidden md:flex space-x-10 font-bold">
+              <div className="hidden md:flex space-x-10 font-bold">
             <Link href="/" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/') ? 'bg-customYellow' : ''}`}>
               Home
               </Link>
-            <Link href="/shop" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/shop') ? 'bg-customYellow' : ''}`}>
-              Shop
+            <Link href="/about" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/about') ? 'bg-customYellow' : ''}`}>
+              About Us
               </Link>
             <Link href="/contacts" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/contact') ? 'bg-customYellow' : ''}`}>
               Contact

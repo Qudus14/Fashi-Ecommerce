@@ -78,11 +78,11 @@ export function CategorySelectorComponent() {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command>
+      <PopoverContent className="w-full p-0 bg-customYellow border-none">
+        <Command className="text-white font-semibold">
           <CommandInput 
           placeholder="Search category..."
-          className="h-9"
+          className="h-9 text-white font-semibold"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               handleSearch(e.currentTarget.value)

@@ -5,6 +5,7 @@ import { Command, ShoppingCartIcon, Package , MenuIcon, Home } from 'lucide-reac
 import { Business, Storefront } from '@mui/icons-material'
 import Link from 'next/link'
 import { ClerkLoaded, SignInButton, UserButton, useUser } from '@clerk/nextjs'
+import { CategorySelectorComponent } from '../ui/category-selector'
 const data = {
   projects: [
     {
@@ -13,8 +14,8 @@ const data = {
       icon: Home,
     },
     {
-      name: 'Shop',
-      url: '/shop',
+      name: 'About',
+      url: '/about',
       icon: Storefront,
     },
     {
@@ -90,6 +91,12 @@ const Menu = () => {
           </ul>
         </div>
 
+       <div className="mt-auto pt-2">
+          <ul className="space-y-1">
+            <CategorySelectorComponent/>
+          </ul>
+        </div>
+
         <div className="mt-6 pt-6 border-t border-gray-200">
         <Link href="/contact" className="text-gray-800 hover:text-gray-600">
                 <ClerkLoaded>
@@ -121,8 +128,8 @@ const Menu = () => {
 
       {/* Main Content */}
       <div className={`flex-1 p-4 transition-all duration-300 ${isOpen ? 'ml-64' : 'ml-0'}`}>
-        <button onClick={toggleSidebar} className="bg-customYellow flex text-white px-3 py-2 rounded lg:hidden">
-          <MenuIcon className="mr-2" />
+        <button onClick={toggleSidebar} className="bg-customYellow flex text-white px-3 py-2 rounded md:hidden">
+          <MenuIcon className="lg:mr-2 mr-0" />
         </button>
       </div>
     </div>

@@ -152,7 +152,7 @@ const MenBanner = () => {
             aria-label="Discover Men's Collection"
           >
             <div 
-              className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat transition-all duration-300 group-hover:opacity-90" 
+              className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat  cursor-pointer transition-transform duration-300 hover:scale-105  group-hover:opacity-90" 
               style={{backgroundImage: "url('img/products/man-large.jpg?height=500&width=400')"}}
             >
               <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white transition-all duration-300 group-hover:bg-opacity-50">

@@ -113,7 +113,7 @@ const Deal = () => {
 
   useEffect(() => {
     const storedCountToDate = localStorage.getItem('countToDate');
-    const countToDate = storedCountToDate ? parseInt(storedCountToDate) : new Date().setDate(new Date().getDate() + 30);
+    const countToDate = storedCountToDate ? parseInt(storedCountToDate) : new Date().setDate(new Date().getDate() + 31);
     
     if (!storedCountToDate) {
       localStorage.setItem('countToDate', countToDate.toString());

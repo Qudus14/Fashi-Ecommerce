@@ -28,7 +28,7 @@ function DealSection() {
           <div className="countdown-timer flex justify-center space-x-4 mb-8" id="countdown">
             <Deal/>
           </div>
-          <div className="bg-customYellow hover:bg-customYellow/90 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 hover:bg-opacity-80" onClick={() => router.push(`/search?q=${encodeURIComponent("HandBag")}`)}>
+          <div className="bg-customYellow hover:bg-customYellow/90 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 hover:bg-opacity-80 cursor-pointer" onClick={() => router.push(`/search?q=${encodeURIComponent("HandBag")}`)}>
             Shop Now
           </div>
         </div>

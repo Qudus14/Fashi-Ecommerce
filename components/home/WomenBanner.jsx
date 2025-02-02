@@ -39,7 +39,7 @@ const WomenBanner = () => {
       const options = {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': 'b69689afe6msh644a34a44e73cf1p194223jsn54a65869c476',
+          'x-rapidapi-key': '0cfc7c25fdmsh4650e00f2123e19p1e54a2jsn2ee1b53ae792',
           'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
         }
       }
@@ -77,7 +77,7 @@ const WomenBanner = () => {
             tabIndex={0}
             role="button"
             aria-label="Discover Men's Collection">
-            <div className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url('img/products/women-large.jpg?height=500&width=400')"}}>
+            <div className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat cursor-pointer transition-transform duration-300 hover:scale-105" style={{backgroundImage: "url('img/products/women-large.jpg?height=500&width=400')"}}>
               <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white">
                 <h2 className="text-4xl font-bold mb-4">Women's</h2>
                 <Link href="#" className="inline-block bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200 transition-colors">

@@ -11,6 +11,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel"
 import { Tv, Smartphone, Cpu, Sofa, ShirtIcon, ShoppingCart, Monitor, Baby, Dumbbell, Home, Sparkles, Gamepad2 } from 'lucide-react'
+import Image from 'next/image'
 
 const categories = [
   { name: "Appliances", icon: Tv },
@@ -25,21 +26,21 @@ const categories = [
 
 const carouselItems = [
   {
-    image: "/img/hero-1.jpg?height=600&width=800",
+    image: "/img/hero-1.jpg",
     category: "Summer Collection",
     title: "Refresh Your Wardrobe",
     description: "Discover the hottest trends for the season",
     discount: 25
   },
   {
-    image: "/img/hero-2.jpg?height=600&width=800",
+    image: "/img/hero-2.jpg",
     category: "Tech Gadgets",
     title: "Upgrade Your Devices",
     description: "Find the latest innovations in technology",
     discount: 25
   },
   {
-    image: "/img/hero-1.jpg?height=600&width=800",
+    image: "/img/hero-1.jpg",
     category: "Home Decoration",
     title: "Transform Your Space",
     description: "Create the perfect ambiance for your home",
@@ -55,14 +56,15 @@ export default function Hero() {
 
   return (
     <div className="container mx-auto px-2">
-      <div className="flex flex-col md:flex-row md:h-[80vh]">
+      <div className="flex flex-col md:flex-row py-2">
         {/* Categories - Hidden on small screens */}
-        <div className="hidden md:block border border-gray-200 rounded w-1/4 pr-1 h-full overflow-y-auto">
+        <div className="hidden md:block border border-gray-200 rounded w-1/4 pr-1">
           <ul className="space-y-1">
             {categories.map((category) => (
               <li
                 key={category.name}
                 className="p-2 hover:bg-customYellow text-base font-medium rounded cursor-pointer transition-colors flex items-center"
+                onClick={() => router.push(`/search?q=${encodeURIComponent(`${category.name}`)}`)}
               >
                 <category.icon className="mr-2 h-5 w-5" />
                 {category.name}
@@ -88,10 +90,12 @@ export default function Hero() {
                 <CarouselItem key={index} className="pl-0">
                   <Card className="h-full border-none rounded-none">
                     <CardContent className="flex items-center justify-center p-0 h-full relative">
-                      <img
+                      <Image
                         src={item.image || "/placeholder.svg"}
                         alt={`Hero Image ${index + 1}`}
-                        className="w-full h-full object-cover"
+                        height={600}
+                        width={800}
+                        className="w-full h-full object-contain"
                       />
                       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center">
                         <div className="container mx-auto px-4">
@@ -142,13 +146,13 @@ export default function Hero() {
                           </div>
                         </div>
                         <motion.div 
-                          className="absolute top-4 right-4 bg-white text-black p-4 rounded-full"
+                          className="hidden md:block absolute top-4 right-4 bg-white text-black p-2 md:p-4 rounded-full"
                           initial={{ scale: 0, rotate: -180 }}
                           animate={{ scale: 1, rotate: 0 }}
                           transition={{ duration: 0.5, delay: 1.2, type: "spring" }}
                         >
-                          <h2 className="text-lg font-bold">
-                            <span className="text-lg">Use code : <span className='text-red-600'>BFRIDAY</span> to get {item.discount}% OFF</span>
+                          <h2 className="text-sm md:text-lg font-bold">
+                            <span className="text-sm md:text-lg">Use code : <span className='text-red-600'>BFRIDAY</span> to get {item.discount}% OFF</span>
                           </h2>
                         </motion.div>
                       </div>
