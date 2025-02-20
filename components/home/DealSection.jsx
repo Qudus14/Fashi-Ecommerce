@@ -10,7 +10,7 @@ function DealSection() {
   
   return (
     <section
-      className="container mx-auto bg-cover bg-center h-[540px] py-16"
+      className="container px-2 mx-auto bg-cover bg-center h-[540px] py-16"
       style={{ backgroundImage: `url(${timeBg.src})` }}
     >
       <div className="container flex flex-col items-center h-full">

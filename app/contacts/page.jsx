@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { MapPin, Phone, Mail } from 'lucide-react'
-import Footer from '@/components/public/Footer'
+import Footer from '@/components/Public/Footer'
 import { Button } from '@/components/ui/button'
 
 

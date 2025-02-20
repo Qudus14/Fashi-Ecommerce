@@ -1,6 +1,6 @@
 
 import Basket from "@/components/Public/Basket";
-import Footer from "@/components/public/Footer";
+import Footer from "@/components/Public/Footer";
 import { ShoppingCartIcon } from "lucide-react";
 
 

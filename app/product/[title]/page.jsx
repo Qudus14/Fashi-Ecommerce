@@ -1,12 +1,14 @@
-import Footer from "@/components/public/Footer";
+import Footer from "@/components/Public/Footer";
+import LoadingSpinner from "@/components/Public/LoadingPage";
 import ProductDetail from "@/lib/fetchProduct";
+import { Suspense } from "react";
 
 async function fetchProductDetails(productTitle) {
   const url = `https://real-time-product-search.p.rapidapi.com/search?q=${encodeURIComponent(productTitle)}`;
   const options = {
     method: 'GET',
     headers: {
-      'x-rapidapi-key': '0cfc7c25fdmsh4650e00f2123e19p1e54a2jsn2ee1b53ae792',
+      'x-rapidapi-key': 'cf7320b6d2msh8734c6317a1bd89p1c468ejsn4b0d0f62e427',
       'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
     }
   };
@@ -43,7 +45,9 @@ export default async function ProductPage({ params }) {
   return (
     <>
       <main className="container mx-auto px-4 py-8">
+        <Suspense fallback={<LoadingSpinner/>}>
         <ProductDetail product={productData} />
+        </Suspense>
       </main>
       <Footer />
     </>

@@ -1,4 +1,4 @@
- import Header from "@/components/public/Header";
+ import Header from "@/components/Public/Header";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 

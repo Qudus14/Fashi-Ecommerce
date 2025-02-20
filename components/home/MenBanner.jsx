@@ -13,11 +13,12 @@ import {
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
 import { useCartStore } from '@/store'
-import AddToCart from '../public/AddToCart'
+import AddToCart from '../Public/AddToCart'
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
+import LoadingSpinner from '../Public/LoadingPage';
 
-const categories = ['Electronics', 'Watches', 'Shoes', 'Sports and fitness']
+const categories = ['Electronics', 'Watches', 'Shoes', 'Sports']
 
 const MenBanner = () => {
   const router = useRouter()
@@ -39,7 +40,7 @@ const MenBanner = () => {
       const options = {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': '0cfc7c25fdmsh4650e00f2123e19p1e54a2jsn2ee1b53ae792',
+          'x-rapidapi-key': 'dfc93e44d5msh1a2d1e11bc243fcp1dd2acjsnc2e4dbde6a0c',
           'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
         }
       }
@@ -68,10 +69,10 @@ const MenBanner = () => {
   }
 
   return (
-    <section className="py-16 px-14">
+    <section className="md:py-16 py-4 md:px-14 px-4">
       <div className="container mx-auto">
-        <div className="flex md:ml-12 ml-0 mb-8">
-          <div className="filter-control">
+        <div className="flex md:ml-12 ml-0 mb-4">
+          <div className="ml-2 md:ml-32">
             <ul className="flex items-center space-x-4">
               {categories.map((category, index) => (
                 <li 
@@ -86,9 +87,9 @@ const MenBanner = () => {
           </div>
         </div>
         <div className="flex flex-wrap -mx-4">
-          <div className="w-full lg:w-2/3 px-4">
-            {loading && <p className="text-center">Loading...</p>}
-            {error && <p className="text-center text-red-500">{error}</p>}
+          <div className="w-full lg:w-2/3 md:px-4 px-3">
+            {loading && <div className="text-center pt-16 md:pt-48"><LoadingSpinner/></div>}
+            {error && <div className="text-center text-red-500">{error}</div>}
             {!loading && !error && (
               <Carousel plugins={[
                 Autoplay({
@@ -106,7 +107,7 @@ const MenBanner = () => {
                               alt={product.product_title} 
                               width={300} 
                               height={300} 
-                              className="w-full h-[250px] object-cover"
+                              className="w-full h-[250px] object-contain"
                             />
                             <div className="absolute top-0 right-4 bg-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-full group-hover:translate-y-4">
                               <Heart className="w-5 h-5 text-gray-600" />
@@ -141,10 +142,11 @@ const MenBanner = () => {
                          <span className="text-gray-900">&gt;</span>
                        </CarouselNext>
               </Carousel>
+              
             )}
           </div>
           <div 
-            className="w-full lg:w-1/3 px-4 mt-8 lg:mt-0 cursor-pointer group"
+            className="w-full lg:w-1/3 md:px-4 px-3 mt-4 lg:mt-0 cursor-pointer group"
             onClick={handleClick}
             onKeyDown={(e) => e.key === 'Enter' && handleClick()}
             tabIndex={0}
@@ -152,7 +154,7 @@ const MenBanner = () => {
             aria-label="Discover Men's Collection"
           >
             <div 
-              className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat  cursor-pointer transition-transform duration-300 hover:scale-105  group-hover:opacity-90" 
+              className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat  cursor-pointer transition-transform duration-300 hover:scale-95  group-hover:opacity-90" 
               style={{backgroundImage: "url('img/products/man-large.jpg?height=500&width=400')"}}
             >
               <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white transition-all duration-300 group-hover:bg-opacity-50">

@@ -1,7 +1,7 @@
 import React from 'react'
 import Banner from './Banner'
 import Hero from './Hero'
-import Footer from '../public/Footer'
+import Footer from '../Public/Footer'
 
 
 function HomePage() {

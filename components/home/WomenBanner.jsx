@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
 import { useCartStore } from '@/store'
-import AddToCart from '../public/AddToCart'
+import AddToCart from '../Public/AddToCart'
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
+import LoadingSpinner from '../Public/LoadingPage';
 
 const categories = ['Clothings', 'HandBag', 'Shoes', 'Accessories']
 
@@ -39,7 +40,7 @@ const WomenBanner = () => {
       const options = {
         method: 'GET',
         headers: {
-          'x-rapidapi-key': '0cfc7c25fdmsh4650e00f2123e19p1e54a2jsn2ee1b53ae792',
+          'x-rapidapi-key': 'dfc93e44d5msh1a2d1e11bc243fcp1dd2acjsnc2e4dbde6a0c',
           'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
         }
       }
@@ -68,16 +69,16 @@ const WomenBanner = () => {
   }
 
   return (
-    <section className="py-16 px-14">
+    <section className="md:py-16 py-4 md:px-14 px-4">
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">
-          <div className="w-full lg:w-1/3 px-4 mb-8 lg:mb-0 cursor-pointer group"
+          <div className="w-full lg:w-1/3 md:px-4 px-3 md:mb-8 mb-4 lg:mb-0 cursor-pointer group"
             onClick={handleClick}
             onKeyDown={(e) => e.key === 'Enter' && handleClick()}
             tabIndex={0}
             role="button"
             aria-label="Discover Men's Collection">
-            <div className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat cursor-pointer transition-transform duration-300 hover:scale-105" style={{backgroundImage: "url('img/products/women-large.jpg?height=500&width=400')"}}>
+            <div className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat cursor-pointer transition-transform duration-300 hover:scale-95" style={{backgroundImage: "url('img/products/women-large.jpg?height=500&width=400')"}}>
               <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white">
                 <h2 className="text-4xl font-bold mb-4">Women's</h2>
                 <Link href="#" className="inline-block bg-white text-black px-6 py-2 rounded-full hover:bg-gray-200 transition-colors">
@@ -86,8 +87,8 @@ const WomenBanner = () => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-2/3 px-4 lg:ml-auto">
-            <div className="mb-8">
+          <div className="w-full lg:w-2/3 md:px-4 px-3 lg:ml-auto">
+            <div className="ml-2 mb-4 md:ml-32">
               <ul className="flex items-center space-x-4">
                 {categories.map((category, index) => (
                   <li 
@@ -100,8 +101,8 @@ const WomenBanner = () => {
                 ))}
               </ul>
             </div>
-            {loading && <p className="text-center">Loading...</p>}
-            {error && <p className="text-center text-red-500">{error}</p>}
+            {loading && <div className="text-center pt-16 md:pt-48"><LoadingSpinner/></div>}
+            {error && <div className="text-center text-red-500">{error}</div>}
             {!loading && !error && (
               <Carousel plugins={[
                 Autoplay({
@@ -119,7 +120,7 @@ const WomenBanner = () => {
                               alt={product.product_title} 
                               width={300} 
                               height={300} 
-                              className="w-full h-[250px] object-cover"
+                              className="w-full h-[250px] object-contain"
                             />
                             <div className="absolute top-0 right-4 bg-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-full group-hover:translate-y-4">
                               <Heart className="w-5 h-5 text-gray-600" />

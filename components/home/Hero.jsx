@@ -88,14 +88,14 @@ export default function Hero() {
             <CarouselContent className="-ml-0">
               {carouselItems.map((item, index) => (
                 <CarouselItem key={index} className="pl-0">
-                  <Card className="h-full border-none rounded-none">
-                    <CardContent className="flex items-center justify-center p-0 h-full relative">
+                  <Card className="md:h-full h-[350px] border-none rounded-none">
+                    <CardContent className="flex items-center justify-center p-0 md:h-full h-[350px] relative">
                       <Image
                         src={item.image || "/placeholder.svg"}
                         alt={`Hero Image ${index + 1}`}
                         height={600}
                         width={800}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center">
                         <div className="container mx-auto px-4">

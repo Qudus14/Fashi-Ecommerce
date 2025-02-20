@@ -38,7 +38,7 @@ function Header() {
 
   return (
     <>
-    <div className="sticky top-0 z-50 bg-white w-full pt-2 border-b border-gray-200 justify-between sm:px-6 px-5 lg:px-8">
+    <div className="sticky top-0 z-40 bg-white w-full pt-2 border-b border-gray-200 justify-between sm:px-6 px-5 lg:px-8">
     <div className="sm:pt-0 sm:pb-2 pb-1 md:pb-3 md:pt-0 flex flex-col items-center space-y-4 md:flex-row md:justify-between md:space-y-0">
       
       {/* Logo section */}
@@ -69,7 +69,7 @@ function Header() {
       {/* Icons and Menu Section */}
       <div className="w-full text-center flex items-center justify-between">
         {/* Icon section */}
-        <ul className="ml-6 md:ml-14 flex items-center space-x-3">
+        <ul className="ml-2 md:ml-14 flex items-center space-x-3">
           <li className="relative">
             <Link href="/basket" onClick={handleClick} className="flex border border-customYellow space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded">
               <ShoppingCartIcon className="w-6 h-6 items-center text-white" />
@@ -78,14 +78,14 @@ function Header() {
               {itemCount}
             </span>
     )}
-              <span className="text-white">My Basket</span>
+              <span className="text-white">Basket</span>
             </Link>
           </li>
           <li className="relative group flex items-center">
           {isSignedIn ? (
             <Link href="/orders" className="flex border border-customYellow space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded">
               <Package className="w-6 h-6 items-center text-white" />
-              <span className="text-white">My Orders</span>
+              <span className="text-white">Orders</span>
             </Link>
             ) : (
               <SignInButton mode="modal">

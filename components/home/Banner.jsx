@@ -20,7 +20,7 @@ function Banner() {
       <div className="container mx-auto">
         <div className="flex flex-wrap">
           <div className="w-full lg:w-1/3 p-2">
-            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105"  
+            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-95"  
             onClick={() => router.push(`/search?q=${encodeURIComponent("Men's")}`)}
             >
               <Image
@@ -39,7 +39,7 @@ function Banner() {
             </div>
           </div>
           <div className="w-full lg:w-1/3 p-2">
-            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105"
+            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-95"
             onClick={() => router.push(`/search?q=${encodeURIComponent("Women's")}`)}
             >
               <Image
@@ -58,7 +58,7 @@ function Banner() {
             </div>
           </div>
           <div className="w-full lg:w-1/3 p-2">
-            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105"
+            <div className="relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-95"
             onClick={() => router.push(`/search?q=${encodeURIComponent("Kid's")}`)}
             >
               <Image

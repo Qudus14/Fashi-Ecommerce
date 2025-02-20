@@ -9,7 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import Footer from '@/components/public/Footer';
+import Footer from '@/components/Public/Footer';
 
 export default async function SearchPage({ searchParams }) {
   const searchTerm = searchParams.q || '';

@@ -2,7 +2,7 @@ import Image from "next/image"
 import TeamMember from "./team-member"
 import StatsCard from "./stats-card"
 import ServiceFeature from "./service-feature"
-import Footer from "@/components/public/Footer"
+import Footer from "@/components/Public/Footer"
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
@@ -24,7 +24,7 @@ export default function Page() {
           </div>
           <div>
             <Image
-              src="/img/banner-2.jpg"
+              src="/img/about.jpg"
               alt="Shopping experience"
               width={600}
               height={500}

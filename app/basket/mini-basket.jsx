@@ -9,7 +9,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { createCheckoutSession } from '@/actions/createCheckoutSession';
-import AddToCart from '@/components/public/AddToCart';
+import AddToCart from '@/components/Public/AddToCart';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 

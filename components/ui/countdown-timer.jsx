@@ -108,26 +108,32 @@ const Deal = () => {
     days: { tens: 0, ones: 0 },
     hours: { tens: 0, ones: 0 },
     minutes: { tens: 0, ones: 0 },
-    seconds: { tens: 0, ones: 0 }
+    seconds: { tens: 0, ones: 0 },
   })
 
   useEffect(() => {
-    const storedCountToDate = localStorage.getItem('countToDate');
-    const countToDate = storedCountToDate ? parseInt(storedCountToDate) : new Date().setDate(new Date().getDate() + 31);
-    
-    if (!storedCountToDate) {
-      localStorage.setItem('countToDate', countToDate.toString());
+    const getNewExpirationDate = () => {
+      const newDate = new Date()
+      newDate.setDate(newDate.getDate() + 30)
+      return newDate.getTime()
+    }
+
+    let countToDate = Number.parseInt(localStorage.getItem("countToDate") || "0")
+
+    if (countToDate <= new Date().getTime()) {
+      // If the stored date is in the past or doesn't exist, set a new expiration date
+      countToDate = getNewExpirationDate()
+      localStorage.setItem("countToDate", countToDate.toString())
     }
 
     const intervalId = setInterval(() => {
-      const currentDate = new Date()
+      const currentDate = new Date().getTime()
       const timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000)
-      
+
       if (timeBetweenDates <= 0) {
-        clearInterval(intervalId);
-        localStorage.removeItem('countToDate');
-        // Reset the countdown or handle the expiration as needed
-        return;
+        // Timer has expired, reset it to 30 days from now
+        countToDate = getNewExpirationDate()
+        localStorage.setItem("countToDate", countToDate.toString())
       }
 
       const days = Math.floor(timeBetweenDates / 86400)
@@ -139,12 +145,13 @@ const Deal = () => {
         days: { tens: Math.floor(days / 10), ones: days % 10 },
         hours: { tens: Math.floor(hours / 10), ones: hours % 10 },
         minutes: { tens: Math.floor(minutes / 10), ones: minutes % 10 },
-        seconds: { tens: Math.floor(seconds / 10), ones: seconds % 10 }
+        seconds: { tens: Math.floor(seconds / 10), ones: seconds % 10 },
       })
     }, 250)
 
     return () => clearInterval(intervalId)
   }, [])
+
 
   const FlipCardComponent = ({ value }) => {
     const [flip, setFlip] = useState(false)
