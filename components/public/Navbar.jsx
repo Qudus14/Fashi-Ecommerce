@@ -19,8 +19,8 @@ export default function Navbar(){
   
     return(
         <nav className="lg:sticky hidden md:block md:top-16 z-50 bg-gray-900 shadow-md p-1 mb-0">
-            <div className="flex justify-between items-center">
-              <div className="hidden md:flex space-x-10 font-bold">
+            <div className="flex justify-between items-center px-28">
+              <div className="hidden md:flex space-x-10 font-bold text-lg">
             <Link href="/" className={`px-4 py-2 text-white hover:bg-customYellow/95 ${isActive('/') ? 'bg-customYellow' : ''}`}>
               Home
               </Link>
@@ -47,21 +47,20 @@ export default function Navbar(){
               </ul>
             </div>
               </div>
-              <div className="flex items-center h-full pl-2 pr-3 md:pr-3 ">
+              <div className="flex items-center h-full">
               <Link href="/contact" className="text-gray-800 hover:text-gray-600">
                 <ClerkLoaded>
                   {user && (
                     <link href='/'>
-
                     </link>
                   )}
                   {user ? (
                     <div className="flex items-center space-x-2">
                       <UserButton width={200} height={200} />
-                      <div className="hidden text-gray-200 sm:block text-xs font-bold">{user.fullName}</div>
+                      <div className="hidden text-gray-200 sm:block text-lg font-bold">{user.fullName}</div>
                     </div>
                   ) : (
-                    <SignInButton className="bg-customYellow text-white p-2"  mode='modal' />
+                    <SignInButton className="bg-customYellow text-white p-2 font-bold text-lg rounded"  mode='modal' />
                   )}
                 </ClerkLoaded>
               </Link>

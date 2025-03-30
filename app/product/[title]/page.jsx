@@ -4,11 +4,11 @@ import ProductDetail from "@/lib/fetchProduct";
 import { Suspense } from "react";
 
 async function fetchProductDetails(productTitle) {
-  const url = `https://real-time-product-search.p.rapidapi.com/search?q=${encodeURIComponent(productTitle)}`;
+  const url = `https://real-time-product-search.p.rapidapi.com/search-v2?q=${encodeURIComponent(productTitle)}`;
   const options = {
     method: 'GET',
     headers: {
-      'x-rapidapi-key': 'cf7320b6d2msh8734c6317a1bd89p1c468ejsn4b0d0f62e427',
+      'x-rapidapi-key': 'b69689afe6msh644a34a44e73cf1p194223jsn54a65869c476',
       'x-rapidapi-host': 'real-time-product-search.p.rapidapi.com'
     }
   };

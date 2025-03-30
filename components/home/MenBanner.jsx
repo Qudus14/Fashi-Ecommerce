@@ -99,14 +99,14 @@ const MenBanner = () => {
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {products.map((product) => (
                     <CarouselItem key={product.product_id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                      <Card className="overflow-hidden border-gray-200">
+                      <Card className="overflow-hidden border-gray-200 w-full md:w-[270px] h-[400px]">
                         <CardContent className="p-0">
                           <div className="relative overflow-hidden group">
                             <Image 
                               src={product.product_photos[0] || '/placeholder.svg?height=300&width=300'} 
                               alt={product.product_title} 
-                              width={300} 
-                              height={300} 
+                              width={250} 
+                              height={250} 
                               className="w-full h-[250px] object-contain"
                             />
                             <div className="absolute top-0 right-4 bg-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-full group-hover:translate-y-4">
@@ -124,8 +124,8 @@ const MenBanner = () => {
                         </CardContent>
                         <CardFooter className="flex flex-col items-start p-4">
                           <div className="text-sm font-semibold flex items-center justify-between w-full text-gray-500">
-                             <span>{activeCategory}</span>
-                             <span className="text-customYellow">{product.offer && product.offer.price ? product.offer.price : 'Price not available'}</span>
+                             <span className="text-gray-400 font-bold text-lg">{activeCategory}</span>
+                             <span className="text-customYellow font-bold text-lg">{product.offer && product.offer.price ? product.offer.price : 'Price not available'}</span>
                           </div>
                           <Link href="#" className="block font-semibold text-lg mb-2 hover:text-customYellow">
                           {product.product_title.slice(0, 70) + '...'}

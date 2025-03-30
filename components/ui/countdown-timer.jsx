@@ -46,6 +46,7 @@ const Segment = styled.div`
 
 const SegmentTitle = styled.div`
   font-size: 0.75em;
+  font-weight: bold;
 `
 
 const FlipCard = styled.div`
