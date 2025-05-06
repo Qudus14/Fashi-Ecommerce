@@ -15,6 +15,7 @@ const nextConfig = {
                   'encrypted-tbn7.gstatic.com',
                   'encrypted-tbn8.gstatic.com',
                   'encrypted-tbn9.gstatic.com',
+                  'lh3.googleusercontent.com',
                   'cdn.sanity.io',
         ],
       },
