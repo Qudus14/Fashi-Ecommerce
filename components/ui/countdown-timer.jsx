@@ -1,23 +1,25 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react'
-import styled, { createGlobalStyle, keyframes } from 'styled-components'
+import React, { useState, useEffect, useRef } from "react";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
 
 const flipTop = keyframes`
   100% {
     transform: rotateX(90deg);
   }
-`
+`;
 
 const flipBottom = keyframes`
   100% {
     transform: rotateX(0deg);
   }
-`
+`;
 
 const DealContainer = styled.div`
   font-size: 16px;
-  *, *::after, *::before {
+  *,
+  *::after,
+  *::before {
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
   }
@@ -30,54 +32,56 @@ const Container = styled.div`
   gap: 0.5em;
   justify-content: center;
   font-size: 1.5rem;
-`
+`;
 
 const ContainerSegment = styled.div`
   display: flex;
   flex-direction: column;
-  gap: .1em;
+  gap: 0.1em;
   align-items: center;
-`
+`;
 
 const Segment = styled.div`
   display: flex;
-  gap: .1em;
-`
+  gap: 0.1em;
+`;
 
 const SegmentTitle = styled.div`
   font-size: 0.75em;
   font-weight: bold;
-`
+  text-transform: uppercase;
+  color: #ffffff;
+`;
 
 const FlipCard = styled.div`
   position: relative;
   display: inline-flex;
   flex-direction: column;
-  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .2);
-  border-radius: .1em;
-`
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 0.1em;
+`;
 
 const CardPart = styled.div`
-  height: .75em;
+  height: 0.75em;
   line-height: 1;
-  padding: .25em;
+  padding: 0.25em;
   overflow: hidden;
-`
+`;
 
 const TopHalf = styled(CardPart)`
   background-color: #f7f7f7;
-  border-top-right-radius: .1em;
-  border-top-left-radius: .1em;
+  border-top-right-radius: 0.1em;
+  border-top-left-radius: 0.1em;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-`
+`;
 
 const BottomHalf = styled(CardPart)`
   background-color: white;
   display: flex;
   align-items: flex-end;
-  border-bottom-right-radius: .1em;
-  border-bottom-left-radius: .1em;
-`
+  border-bottom-right-radius: 0.1em;
+  border-bottom-left-radius: 0.1em;
+`;
 
 const TopFlip = styled(CardPart)`
   position: absolute;
@@ -85,10 +89,10 @@ const TopFlip = styled(CardPart)`
   animation: ${flipTop} 250ms ease-in;
   transform-origin: bottom;
   background-color: #f7f7f7;
-  border-top-right-radius: .1em;
-  border-top-left-radius: .1em;
+  border-top-right-radius: 0.1em;
+  border-top-left-radius: 0.1em;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-`
+`;
 
 const BottomFlip = styled(CardPart)`
   position: absolute;
@@ -100,9 +104,9 @@ const BottomFlip = styled(CardPart)`
   background-color: white;
   display: flex;
   align-items: flex-end;
-  border-bottom-right-radius: .1em;
-  border-bottom-left-radius: .1em;
-`
+  border-bottom-right-radius: 0.1em;
+  border-bottom-left-radius: 0.1em;
+`;
 
 const Deal = () => {
   const [countdown, setCountdown] = useState({
@@ -110,63 +114,64 @@ const Deal = () => {
     hours: { tens: 0, ones: 0 },
     minutes: { tens: 0, ones: 0 },
     seconds: { tens: 0, ones: 0 },
-  })
+  });
 
   useEffect(() => {
     const getNewExpirationDate = () => {
-      const newDate = new Date()
-      newDate.setDate(newDate.getDate() + 30)
-      return newDate.getTime()
-    }
+      const newDate = new Date();
+      newDate.setDate(newDate.getDate() + 30);
+      return newDate.getTime();
+    };
 
-    let countToDate = Number.parseInt(localStorage.getItem("countToDate") || "0")
+    let countToDate = Number.parseInt(
+      localStorage.getItem("countToDate") || "0"
+    );
 
     if (countToDate <= new Date().getTime()) {
       // If the stored date is in the past or doesn't exist, set a new expiration date
-      countToDate = getNewExpirationDate()
-      localStorage.setItem("countToDate", countToDate.toString())
+      countToDate = getNewExpirationDate();
+      localStorage.setItem("countToDate", countToDate.toString());
     }
 
     const intervalId = setInterval(() => {
-      const currentDate = new Date().getTime()
-      const timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000)
+      const currentDate = new Date().getTime();
+      const timeBetweenDates = Math.ceil((countToDate - currentDate) / 1000);
 
       if (timeBetweenDates <= 0) {
         // Timer has expired, reset it to 30 days from now
-        countToDate = getNewExpirationDate()
-        localStorage.setItem("countToDate", countToDate.toString())
+        countToDate = getNewExpirationDate();
+        localStorage.setItem("countToDate", countToDate.toString());
       }
 
-      const days = Math.floor(timeBetweenDates / 86400)
-      const hours = Math.floor((timeBetweenDates % 86400) / 3600)
-      const minutes = Math.floor((timeBetweenDates % 3600) / 60)
-      const seconds = timeBetweenDates % 60
+      const days = Math.floor(timeBetweenDates / 86400);
+      const hours = Math.floor((timeBetweenDates % 86400) / 3600);
+      const minutes = Math.floor((timeBetweenDates % 3600) / 60);
+      const seconds = timeBetweenDates % 60;
 
       setCountdown({
         days: { tens: Math.floor(days / 10), ones: days % 10 },
         hours: { tens: Math.floor(hours / 10), ones: hours % 10 },
         minutes: { tens: Math.floor(minutes / 10), ones: minutes % 10 },
         seconds: { tens: Math.floor(seconds / 10), ones: seconds % 10 },
-      })
-    }, 250)
+      });
+    }, 250);
 
-    return () => clearInterval(intervalId)
-  }, [])
-
+    return () => clearInterval(intervalId);
+  }, []);
 
   const FlipCardComponent = ({ value }) => {
-    const [flip, setFlip] = useState(false)
-    const [number, setNumber] = useState(value)
+    const [flip, setFlip] = useState(false);
+    const [number, setNumber] = useState(value);
 
     useEffect(() => {
       if (value !== number) {
-        setFlip(true)
+        setFlip(true);
         setTimeout(() => {
-          setNumber(value)
-          setFlip(false)
-        }, 500)
+          setNumber(value);
+          setFlip(false);
+        }, 500);
       }
-    }, [value])
+    }, [value]);
 
     return (
       <FlipCard>
@@ -179,8 +184,8 @@ const Deal = () => {
           </>
         )}
       </FlipCard>
-    )
-  }
+    );
+  };
 
   return (
     <DealContainer>
@@ -215,8 +220,7 @@ const Deal = () => {
         </ContainerSegment>
       </Container>
     </DealContainer>
-  )
-}
+  );
+};
 
-export default Deal
-
+export default Deal;

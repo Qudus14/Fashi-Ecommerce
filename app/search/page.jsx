@@ -1,6 +1,6 @@
-import SearchResults from "@/lib/fetchSearch"
-import { Suspense } from "react"
-import Loading from "./loading"
+import SearchResults from "@/lib/fetchSearch";
+import { Suspense } from "react";
+import Loading from "./loading";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,11 +8,12 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import Footer from "@/components/Public/Footer"
+} from "@/components/ui/breadcrumb";
+import Footer from "@/components/Public/Footer";
 
 export default async function SearchPage({ searchParams }) {
-  const searchTerm = searchParams.q || ""
+  const resolvedSearchParams = await searchParams;
+  const searchTerm = resolvedSearchParams.q || "";
 
   return (
     <>
@@ -26,17 +27,25 @@ export default async function SearchPage({ searchParams }) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-gray-500 capitalize font-bold text-xl">{searchTerm}</BreadcrumbPage>
+              <BreadcrumbPage className="text-gray-500 capitalize font-bold text-xl">
+                {searchTerm}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="ml-5 font-bold text-lg text-gray-500 capitalize py-3">Search Results for: {searchTerm}</h1>
+
+        <h1 className="ml-5 font-bold text-lg text-gray-500 capitalize py-3">
+          Search Results for: {searchTerm}
+        </h1>
+
+        {/* Pass the searchTerm into your component. 
+            Suspense will catch the loading state of SearchResults. 
+        */}
         <Suspense fallback={<Loading />}>
           <SearchResults searchTerm={searchTerm} />
         </Suspense>
       </main>
       <Footer />
     </>
-  )
+  );
 }
-

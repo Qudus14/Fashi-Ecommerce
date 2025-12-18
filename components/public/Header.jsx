@@ -12,7 +12,7 @@ import Navbar from './Navbar';
 
 function Header() {
   const[searchTerm, setSearchTerm]= useState('')
-  const router = useRouter(); // Correct position for router definition
+  const router = useRouter(); 
   const cart = useCartStore((state) => state.cart)
   const [itemCount, setItemCount] = useState(0)
   const {isSignedIn} = useAuth();

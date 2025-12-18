@@ -1,80 +1,88 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { Loader2 } from "lucide-react"
-import Loading from "@/app/search/loading"
-import Link from "next/link"
-
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Loader2, Trash } from "lucide-react";
+import Loading from "@/app/search/loading";
+import Link from "next/link";
+import requests from "@/lib/requests";
+import axiosInstance from "@/Axios";
+import ReviewLoading from "../loading/reviewLoading";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 const Reviews = () => {
-  const [reviews, setReviews] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      setLoading(true)
-      setError(null)
-      const url =
-        "https://real-time-product-search.p.rapidapi.com/product-reviews-v2?product_id=catalogid%3A15554707778408471208%2Cgpcid%3A6219277726645206819%2CheadlineOfferDocid%3A8835386203856143595%2Crds%3APC_15478400683365031707%7CPROD_PC_15478400683365031707%2CimageDocid%3A10653897321817113741%2Cmid%3A576462815432560445%2Cpvt%3Ahg%2Cpvf%3A&limit=10&sort_by=MOST_RELEVANT&country=us&language=en"
-      const options = {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key": "0636af3412mshc4ade4adc482543p108907jsnfc18649145fd",
-          "x-rapidapi-host": "real-time-product-search.p.rapidapi.com",
-        },
-      }
+    const fetchReview = async () => {
+      setLoading(true);
+      setError(null);
 
       try {
-        const response = await fetch(url, options)
-        const result = await response.json()
-        console.log("API Response:", result) // Debug log
+        const url = requests.fetchReviews;
+        const response = await axiosInstance.get(url);
 
-        if (result.status === "OK" && result.data && result.data.reviews) {
-          setReviews(result.data.reviews)
+        console.log("Review Response:", response.data);
+
+        const reviewsData = response.data?.data?.reviews;
+
+        if (response.data?.status === "OK" && Array.isArray(reviewsData)) {
+          setReviews(reviewsData);
         } else {
-          setError("Failed to fetch reviews")
+          setError("Failed to get customer reviews");
         }
-      } catch (error) {
-        console.error("Error fetching reviews:", error)
-        setError("An error occurred while fetching reviews")
+      } catch (err) {
+        console.error(err);
+        setError("Review's is temporarily unavailable");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchReviews()
-  }, [])
+    fetchReview();
+  }, []);
 
   return (
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold">Customer Reviews</h2>
-          <p className="text-gray-600 text-lg font-semibold mt-2">See what our customers are saying</p>
+          <p className="text-gray-600 text-lg font-semibold mt-2">
+            See what our customers are saying
+          </p>
         </div>
 
         {loading && (
           <div className="flex justify-center items-center py-20">
-            <Loading />
-            <span className="ml-2 text-gray-700 font-bold text-lg">Loading reviews...</span>
+            <ReviewLoading />
           </div>
         )}
 
         {error && (
           <div className="text-center py-10">
-            <p className="text-red-500">{error}</p>
+            <p className="text-red-500 font-bold text-lg">{error}</p>
           </div>
         )}
 
         {!loading && !error && reviews.length === 0 && (
-          <div className="text-center py-10">
-            <p className="text-gray-700 font-bold text-lg">No reviews found.</p>
-          </div>
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Trash />
+              </EmptyMedia>
+              <EmptyTitle>No Projects Yet</EmptyTitle>
+            </EmptyHeader>
+          </Empty>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 shadow-lg">
           {reviews.slice(0, 6).map((review) => (
             <div
               key={review.review_id}
@@ -86,7 +94,7 @@ const Reviews = () => {
                     <div className="relative w-10 h-10 mr-3 rounded-full overflow-hidden">
                       <Image
                         src={review.review_author_photo || "/placeholder.svg"}
-                        alt={review.review_author|| "/placeholder.svg" }
+                        alt={review.review_author || "/placeholder.svg"}
                         width={50}
                         height={50}
                         className="object-cover"
@@ -101,7 +109,9 @@ const Reviews = () => {
                   )}
                   <div>
                     <h4 className="font-semibold">{review.review_author}</h4>
-                    <p className="text-sm text-gray-500">{review.review_date}</p>
+                    <p className="text-sm text-gray-500">
+                      {review.review_date}
+                    </p>
                   </div>
                   <div className="ml-auto flex">
                     {[...Array(5)].map((_, i) => (
@@ -117,9 +127,13 @@ const Reviews = () => {
                   </div>
                 </div>
 
-                <h3 className="text-lg font-bold mb-2">{review.review_title}</h3>
+                <h3 className="text-lg font-bold mb-2">
+                  {review.review_title}
+                </h3>
 
-                <p className="text-gray-700 mb-4 line-clamp-4">{review.review_text}</p>
+                <p className="text-gray-700 mb-4 line-clamp-4">
+                  {review.review_text}
+                </p>
 
                 <div className="flex justify-between items-center text-sm text-gray-500 mt-4 pt-4 border-t border-gray-100">
                   <span>Source: {review.review_source}</span>
@@ -138,7 +152,7 @@ const Reviews = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Reviews
+export default Reviews;
