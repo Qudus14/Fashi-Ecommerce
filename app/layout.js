@@ -24,7 +24,7 @@ export default function RootLayout({ children, basket }) {
 
               <SidebarInset className="flex-1 overflow-y-auto">
                 {/* 3. Added a container with controlled padding */}
-                <main className="p-4 md:p-6">
+                <main className="">
                   {children}
                   {basket}
                 </main>

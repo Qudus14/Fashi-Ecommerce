@@ -23,6 +23,7 @@ const nextConfig = {
       "www.instacart.com",
       "pisces.bbystatic.com",
       "cb.scene7.com",
+      "www.staples-3p.com",
     ],
   },
 };

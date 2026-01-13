@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Loader2, Trash } from "lucide-react";
+import { Loader2, LucideDatabase, Trash } from "lucide-react";
 import Loading from "@/app/search/loading";
 import Link from "next/link";
 import requests from "@/lib/requests";
@@ -75,9 +75,9 @@ const Reviews = () => {
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon">
-                <Trash />
+                <LucideDatabase />
               </EmptyMedia>
-              <EmptyTitle>No Projects Yet</EmptyTitle>
+              <EmptyTitle>No Reviews Available</EmptyTitle>
             </EmptyHeader>
           </Empty>
         )}

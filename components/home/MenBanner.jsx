@@ -171,27 +171,27 @@ const MenBanner = () => {
                           </CardContent>
 
                           <CardFooter className="flex flex-col items-start p-4">
-                            <div className="text-sm font-semibold flex items-center justify-between w-full text-gray-500">
-                              <span className="text-customYellow font-bold text-sm bg-white p-2 border border-customYellow rounded-xl">
+                            <div className="text-sm font-semibold text-gray-500">
+                              <span className="text-customYellow font-semibold text-sm bg-white p-1 border border-customYellow rounded-xl">
                                 {activeCategory}
                               </span>
-                              <div className="flex items-center space-x-2">
-                                <span className="flex items-center text-lg font-bold">
-                                  {product?.product_rating}
-                                  <StarFilledIcon
-                                    size={13}
-                                    className="text-customYellow"
-                                  />
-                                </span>
-                                <span className="text-gray-700 font-semibold text-sm">
-                                  ({product?.product_num_reviews} reviews)
-                                </span>
-                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2 mt-2">
+                              <span className="flex items-center text-sm font-bold">
+                                {product?.product_rating}
+                                <StarFilledIcon
+                                  size={13}
+                                  className="text-customYellow"
+                                />
+                              </span>
+                              <span className="text-gray-700 font-semibold text-xs">
+                                ({product?.product_num_reviews} review)
+                              </span>
                             </div>
 
                             <Link
                               href="#"
-                              className="block font-bold text-gray-900 text-base mb-2 hover:text-customYellow"
+                              className="block font-bold text-gray-900 text-base mb-2 hover:text-customYellow line-clamp-3"
                             >
                               {product?.product_title || "Untitled Product"}
                             </Link>
@@ -202,12 +202,8 @@ const MenBanner = () => {
                   })}
                 </CarouselContent>
 
-                <CarouselPrevious className="absolute top-1/2 left-1 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-                  <span className="text-gray-900">&lt;</span>
-                </CarouselPrevious>
-                <CarouselNext className="absolute top-1/2 right-1 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-                  <span className="text-gray-900">&gt;</span>
-                </CarouselNext>
+                <CarouselPrevious className="left-4 bg-white/20 border-none text-white hover:bg-customYellow transition-all" />
+                <CarouselNext className="right-4 bg-white/20 border-none text-white hover:bg-customYellow transition-all" />
               </Carousel>
             )}
           </div>
