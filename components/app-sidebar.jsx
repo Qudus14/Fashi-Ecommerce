@@ -42,7 +42,7 @@ const data = {
     },
     {
       name: "Orders",
-      url: "/order",
+      url: "/orders",
       icon: Package,
     },
   ],
@@ -78,7 +78,7 @@ export function AppSidebar() {
               <li key={project.name}>
                 <a
                   href={project.url}
-                  className="flex items-center py-2 text-sm text-gray-600 hover:bg-customYellow p-2 transition"
+                  className="flex items-center py-2 text-sm text-gray-600 hover:bg-customYellow rounded p-2 transition"
                 >
                   <project.icon className="mr-2 h-6 w-6" />
                   <span className="text-base font-semibold">
@@ -94,8 +94,11 @@ export function AppSidebar() {
         </div>
       </SidebarContent>
       <SidebarFooter>
-        <div className="mt-6 pt-6 border-t border-gray-200" />
-        <Link href="/contact" className="text-gray-800 hover:text-gray-600">
+        <div className="mt-6 pt-6 border-t-2 border-gray-200" />
+        <Link
+          href="/contact"
+          className="text-gray-800 hover:text-gray-600 py-2"
+        >
           <ClerkLoaded>
             {user && <link href="/"></link>}
             {user ? (
@@ -107,7 +110,7 @@ export function AppSidebar() {
               </div>
             ) : (
               <SignInButton
-                className="bg-customYellow text-white p-2"
+                className="bg-customYellow text-white p-2 rounded font-bold text-lg"
                 mode="modal"
               />
             )}

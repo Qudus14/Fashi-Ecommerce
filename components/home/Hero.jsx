@@ -108,7 +108,7 @@ export default function Hero() {
                 ))
               ) : (
                 <CarouselItem className="pl-0">
-                  <div className="h-[450px] md:h-[500px] flex items-center text-5xl justify-center text-customYellow ">
+                  <div className="flex items-center text-5xl justify-center text-customYellow ">
                     {loading ? "Loading Deals..." : <HeroLoading />}
                   </div>
                 </CarouselItem>

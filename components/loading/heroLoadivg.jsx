@@ -103,8 +103,8 @@ function HeroLoading() {
             <CarouselContent className="-ml-0">
               {carouselItems.map((item, index) => (
                 <CarouselItem key={index} className="pl-0">
-                  <Card className="md:h-full h-[350px] border-none rounded-none">
-                    <CardContent className="flex items-center justify-center p-0 md:h-full h-[350px] relative">
+                  <Card className="md:h-full h-full border-none rounded-none">
+                    <CardContent className="flex items-center justify-center p-0 md:h-full h-full relative">
                       <Image
                         src={item.image || "/placeholder.svg"}
                         alt={`Hero Image ${index + 1}`}
@@ -147,7 +147,7 @@ function HeroLoading() {
                               </motion.p>
 
                               <motion.div
-                                className="bg-customYellow hover:bg-customYellow/90 hover:text-gray-100 text-white px-4 py-2 inline-block cursor-pointer"
+                                className="hidden md:inline-block bg-customYellow hover:bg-customYellow/90 hover:text-gray-100 rounded text-base font-semibold text-white px-4 py-2 cursor-pointer"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: 1 }}

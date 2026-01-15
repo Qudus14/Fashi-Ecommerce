@@ -75,7 +75,7 @@ export function SiteHeader() {
         {/* Icons and Menu Section */}
         <div className="w-full text-center flex items-center justify-between">
           {/* Icon section */}
-          <ul className="ml-2 md:ml-14 flex items-center space-x-3">
+          <ul className="ml-2 md:ml-8 lg:ml-14 flex items-center space-x-3">
             <li className="relative">
               <Link
                 href="/basket"
@@ -101,21 +101,17 @@ export function SiteHeader() {
                   <span className="text-white">Orders</span>
                 </Link>
               ) : (
-                <SignInButton mode="modal">
-                  <Link
-                    href="/orders"
-                    className="flex border border-customYellow space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded"
-                  >
-                    <span className="text-white">Sign In</span>
-                  </Link>
-                </SignInButton>
+                <SignInButton
+                  className="bg-customYellow hover:bg-customYellow/85 cursor-pointer text-white font-bold rounded py-2 px-4"
+                  mode="modal"
+                />
               )}
             </li>
           </ul>
           {/* Menu button */}
           <Menu
-            className="h-12 w-12 rounded-xl cursor-pointer text-white md:hidden block p-2 bg-customYellow hover:bg-customYellow/95"
-            size={13}
+            className="h-10 w-10 rounded cursor-pointer text-white md:hidden block p-2 bg-customYellow hover:bg-customYellow/95"
+            size={12}
             onClick={toggleSidebar}
           />
         </div>

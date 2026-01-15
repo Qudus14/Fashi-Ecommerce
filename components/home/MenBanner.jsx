@@ -69,10 +69,10 @@ const MenBanner = () => {
   };
 
   return (
-    <section className="md:py-16 py-4 md:px-14 px-4">
+    <section className="md:py-16 py-4 md:px-10 px-4">
       <div className="container mx-auto">
         <div className="flex md:ml-12 ml-0 mb-4">
-          <div className="ml-8 md:ml-48 justify-self-center">
+          <div className="ml-8 md:ml-36 lg:ml-48 justify-self-center">
             <ul className="flex items-center space-x-4">
               {categories.map((category, index) => (
                 <li
@@ -111,7 +111,6 @@ const MenBanner = () => {
                   {products.map((item, index) => {
                     const product = item?.product || item;
 
-                    // ✅ SAFE IMAGE RESOLUTION
                     const imageUrl = product.product_photos.find(
                       (url) => typeof url === "string" && url.trim() !== ""
                     );
@@ -209,7 +208,7 @@ const MenBanner = () => {
           </div>
 
           <div
-            className="w-full lg:w-1/3 md:px-4 px-3 mt-4 lg:mt-0 cursor-pointer group"
+            className="lg:block md:hidden hidden w-full lg:w-1/3 mt-4 lg:mt-0 cursor-pointer"
             onClick={handleClick}
             onKeyDown={(e) => e.key === "Enter" && handleClick()}
             tabIndex={0}

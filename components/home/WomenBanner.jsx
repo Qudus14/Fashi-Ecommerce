@@ -72,7 +72,7 @@ const WomenBanner = () => {
       <div className="container mx-auto">
         <div className="flex flex-wrap -mx-4">
           <div
-            className="w-full lg:w-1/3 md:px-4 px-3 md:mb-8 mb-4 lg:mb-0 cursor-pointer group"
+            className="lg:block hidden w-full lg:w-1/3 md:px-4 px-3 md:mb-8 mb-4 lg:mb-0 cursor-pointer group"
             onClick={handleClick}
             onKeyDown={(e) => e.key === "Enter" && handleClick()}
             tabIndex={0}
@@ -98,7 +98,7 @@ const WomenBanner = () => {
             </div>
           </div>
           <div className="w-full lg:w-2/3 md:px-4 px-3 lg:ml-auto">
-            <div className="ml-4 md:ml-36 mb-4 justify-self-center">
+            <div className="ml-4 lg:ml-36 mb-4 justify-self-center">
               <ul className="flex items-center space-x-4">
                 {categories.map((category, index) => (
                   <li
