@@ -4,7 +4,7 @@ const instance = axios.create({
   baseURL: "https://real-time-product-search.p.rapidapi.com",
   headers: {
     "Content-Type": "application/json",
-    // "x-rapidapi-key": "2fa901984bmsh8c7209fbf0ec285p1c8df4jsncccc802b7045",
+    "x-rapidapi-key": "da98f41c40mshc426d8dcfcb8424p11b8fajsn8527a0e3e5a6",
     "x-rapidapi-host": "real-time-product-search.p.rapidapi.com",
   },
 });
@@ -17,3 +17,4 @@ export default instance;
 // cf7320b6d2msh8734c6317a1bd89p1c468ejsn4b0d0f62e427
 // c33309897bmshd54c1f6871f1eaap1f9b20jsn1b4baab8df5f
 // 2fa901984bmsh8c7209fbf0ec285p1c8df4jsncccc802b7045
+// da98f41c40mshc426d8dcfcb8424p11b8fajsn8527a0e3e5a6

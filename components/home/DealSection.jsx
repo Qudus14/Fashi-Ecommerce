@@ -118,29 +118,38 @@ function FeaturedCard({ item }) {
             {item.product_description}
           </p>
 
-          {item?.offer?.price && (
-            <div className="mt-6">
-              <span className="text-zinc-500 text-sm uppercase font-bold tracking-widest">
-                Limited Offer
-              </span>
-              <p className="text-customYellow text-4xl font-black">
-                {item.offer.price}
-              </p>
+          <div className="flex flex-col lg:flex-row md:space-x-4 gap-2 lg:gap-0 my-1 lg:items-center">
+            {item?.offer?.price && (
+              <div className="mt-6">
+                <span className="text-zinc-500 text-sm uppercase font-bold tracking-widest">
+                  Limited Offer
+                </span>
+                <p className="text-customYellow font-serif text-4xl font-black">
+                  {item.offer.price}
+                </p>
+              </div>
+            )}
+
+            <div className="justify-self-start py-1">
+              <button
+                onClick={() =>
+                  router.push(
+                    `/search?q=${encodeURIComponent(item.product_title)}`
+                  )
+                }
+                className="flex justify-items-start items-center justify-center gap-3 bg-customYellow hover:bg-yellow-500 font-bold py-4 px-6 text-white rounded-full shadow-lg transition-all"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                Shop Now
+              </button>
             </div>
-          )}
-
-          <button
-            onClick={() =>
-              router.push(`/search?q=${encodeURIComponent(item.product_title)}`)
-            }
-            className="mt-8 flex items-center justify-center gap-3 bg-customYellow hover:bg-yellow-500 px-10 py-4 font-bold text-white rounded-full shadow-lg transition-all"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            Shop Now
-          </button>
-
-          <DealTimer />
+          </div>
         </div>
+      </div>
+
+      {/* Timer area absolute */}
+      <div className="absolute bottom-3 right-52">
+        <DealTimer />
       </div>
     </div>
   );
