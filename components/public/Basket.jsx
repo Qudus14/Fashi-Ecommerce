@@ -1,24 +1,26 @@
 "use client";
 
-import { useCartStore } from '@/store'
-import { getCartTotal, groupByProduct } from '@/lib/util'
-import Image from 'next/image';
-import AddToCart from './AddToCart';
-import { useState, useEffect } from 'react';
-import { SignInButton, useAuth, useUser } from '@clerk/nextjs';
-import { loadStripe } from '@stripe/stripe-js';
-import { Loader } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { createCheckoutSession } from '@/actions/createCheckoutSession';
+import { useCartStore } from "@/store";
+import { getCartTotal, groupByProduct } from "@/lib/util";
+import Image from "next/image";
+import AddToCart from "./AddToCart";
+import { useState, useEffect } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { createCheckoutSession } from "@/actions/createCheckoutSession";
+import { useAuth } from "../service/auth-context";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+);
 
 export default function Basket() {
-  const cart = useCartStore(state => state.cart)
-  const groupedCart = groupByProduct(cart)
-  const basketTotal = getCartTotal(groupedCart)
+  const { user, isAuthenticated } = useAuth();
+  const cart = useCartStore((state) => state.cart);
+  const groupedCart = groupByProduct(cart);
+  const basketTotal = getCartTotal(groupedCart);
   const { isSignedIn } = useAuth();
-  const { user } = useUser();
   const [isCLient, setIsClient] = useState(false);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -33,9 +35,13 @@ export default function Basket() {
 
   const getItemPrice = (item) => {
     if (item.isSponsored) {
-      return parseFloat(item.price.replace(/[^0-9.]/g, ''));
-    } else if (item.typical_price_range && Array.isArray(item.typical_price_range) && item.typical_price_range.length > 1) {
-      return parseFloat(item.typical_price_range[1].replace(/[^0-9.]/g, ''));
+      return parseFloat(item.price.replace(/[^0-9.]/g, ""));
+    } else if (
+      item.typical_price_range &&
+      Array.isArray(item.typical_price_range) &&
+      item.typical_price_range.length > 1
+    ) {
+      return parseFloat(item.typical_price_range[1].replace(/[^0-9.]/g, ""));
     } else {
       return 65.9; // fallback price
     }
@@ -46,8 +52,8 @@ export default function Basket() {
       <div className="container mx-auto p-4 flex flex-col items-center justify-center min-h-[50vh]">
         <p className="text-lg text-gray-600">Your basket is empty.</p>
       </div>
-    )
-  };
+    );
+  }
 
   const handleCheckout = async () => {
     if (!isSignedIn) return;
@@ -60,9 +66,9 @@ export default function Basket() {
         clerkUserId: user.id,
       };
 
-      const cartWithPrices = cart.map(item => ({
+      const cartWithPrices = cart.map((item) => ({
         ...item,
-        price: getItemPrice(item)
+        price: getItemPrice(item),
       }));
 
       const checkoutUrl = await createCheckoutSession(cartWithPrices, metadata);
@@ -74,7 +80,6 @@ export default function Basket() {
       } else {
         console.error("Checkout URL is not defined");
       }
-
     } catch (error) {
       console.error("Error creating checkout session:", error);
     } finally {
@@ -87,15 +92,18 @@ export default function Basket() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Cart items */}
         <div className="flex-grow">
-          {groupedCart.map(item => {
+          {groupedCart.map((item) => {
             const itemPrice = getItemPrice(item);
             const totalItemPrice = itemPrice * item.quantity;
             return (
-              <div key={item.product_id} className="mb-4 p-4 border rounded flex items-center justify-between">
-                <div className='flex items-center cursor-pointer flex-1 min-w-0'>
-                  <div className='w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mr-4'>
+              <div
+                key={item.product_id}
+                className="mb-4 p-4 border rounded flex items-center justify-between"
+              >
+                <div className="flex items-center cursor-pointer flex-1 min-w-0">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mr-4">
                     <Image
-                      className='w-full h-full object-cover rounded'
+                      className="w-full h-full object-cover rounded"
                       src={item.product_photos[0]}
                       alt={item.product_title}
                       width={100}
@@ -106,13 +114,15 @@ export default function Basket() {
                     <h2 className="text-lg sm:text-xl font-semibold truncate">
                       {item.product_title}
                     </h2>
-                    <p className="text-sm sm:text-base"> 
+                    <p className="text-sm sm:text-base">
                       Price: £
-                      {isNaN(totalItemPrice) ? "0.00" : totalItemPrice.toFixed(2)}
+                      {isNaN(totalItemPrice)
+                        ? "0.00"
+                        : totalItemPrice.toFixed(2)}
                     </p>
                   </div>
                 </div>
-                <div className='flex items-center ml-4 flex-shrink-0'> 
+                <div className="flex items-center ml-4 flex-shrink-0">
                   <AddToCart product={item} isSponsored={item.isSponsored} />
                 </div>
               </div>
@@ -130,29 +140,28 @@ export default function Basket() {
             </p>
             <p className="flex justify-between text-2xl font-bold border-t pt-2">
               <span>Total:</span>
-              <span>£{isNaN(basketTotal) ? "0.00" : basketTotal.toFixed(2)}</span>
+              <span>
+                £{isNaN(basketTotal) ? "0.00" : basketTotal.toFixed(2)}
+              </span>
             </p>
           </div>
-          
-          {isSignedIn ? (
+
+          {isAuthenticated ? (
             <button
               onClick={handleCheckout}
-              className='mt-4 w-full bg-customYellow text-white px-4 py-2 rounded hover:bg-customYellow/95 disabled:bg-gray-400'
-              disabled={isLoading}>
+              className="mt-4 w-full bg-customYellow text-white px-4 py-2 rounded hover:bg-customYellow/95 disabled:bg-gray-400"
+              disabled={isLoading}
+            >
               {isLoading ? "Processing..." : "Checkout"}
             </button>
           ) : (
-            <SignInButton mode="modal">
-              <button className='mt-4 w-full bg-customYellow text-white px-4 py-2 rounded hover:bg-customYellow/95'>
-                Sign in to Checkout
-              </button>
-            </SignInButton>
+            <button className="mt-4 w-full bg-customYellow text-white px-4 py-2 rounded hover:bg-customYellow/95">
+              Sign in to Checkout
+            </button>
           )}
         </div>
-        <div className='h-64 lg:h-0'>
-        </div>
+        <div className="h-64 lg:h-0"></div>
       </div>
     </div>
-  )
+  );
 }
-
