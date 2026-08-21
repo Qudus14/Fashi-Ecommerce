@@ -173,13 +173,6 @@ const MenBanner = () => {
     }
   }, [allProducts]);
 
-  // Reset carousel when filtered products change
-  useEffect(() => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollTo(0);
-    }
-  }, [filteredProducts]);
-
   const handleViewAll = () => {
     router.push(`/search?q=${encodeURIComponent("Products")}`);
   };

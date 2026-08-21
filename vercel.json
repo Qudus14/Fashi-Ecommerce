@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://fashi-ecommerce-api.onrender.com/api/:path*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/"
+        }
+    ]
+}
