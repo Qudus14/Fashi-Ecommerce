@@ -1,7 +1,6 @@
 "use client";
 
 import { useCartStore } from '@/store';
-import { SignInButton, useAuth } from '@clerk/nextjs';
 import { Search,ShoppingCartIcon, Package } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';

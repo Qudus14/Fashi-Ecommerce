@@ -1,3 +1,4 @@
+// app/search/page.jsx
 import SearchResults from "@/lib/fetchSearch";
 import { Suspense } from "react";
 import Loading from "./loading";
@@ -28,24 +29,20 @@ export default async function SearchPage({ searchParams }) {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="text-gray-500 capitalize font-bold text-xl">
-                {searchTerm}
+                {searchTerm || "Search"}
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
         <h1 className="ml-5 font-bold text-lg text-gray-500 capitalize py-3">
-          Search Results for: {searchTerm}
+          {searchTerm ? `Search Results for: ${searchTerm}` : "All Products"}
         </h1>
 
-        {/* Pass the searchTerm into your component. 
-            Suspense will catch the loading state of SearchResults. 
-        */}
         <Suspense fallback={<Loading />}>
           <SearchResults searchTerm={searchTerm} />
         </Suspense>
       </main>
-      <Footer />
     </>
   );
 }
