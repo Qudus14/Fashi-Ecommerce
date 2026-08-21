@@ -4,7 +4,7 @@ const instance = axios.create({
   baseURL: "https://real-time-product-search.p.rapidapi.com",
   headers: {
     "Content-Type": "application/json",
-    "x-rapidapi-key": "da98f41c40mshc426d8dcfcb8424p11b8fajsn8527a0e3e5a6",
+    "x-rapidapi-key": "2fa901984bmsh8c7209fbf0ec285p1c8df4jsncccc802b7045",
     "x-rapidapi-host": "real-time-product-search.p.rapidapi.com",
   },
 });

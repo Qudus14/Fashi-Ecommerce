@@ -12,11 +12,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { ClerkLoaded, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { CategorySelectorComponent } from "./ui/category-selector";
 import { Business, Storefront } from "@mui/icons-material";
 import Image from "next/image";
 import logo from "@/public/img/logo.png";
+import { useAuth } from "./service/auth-context";
+import { Button } from "./ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const data = {
   projects: [
@@ -49,7 +51,7 @@ const data = {
 };
 
 export function AppSidebar() {
-  const { user } = useUser();
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <Sidebar
@@ -99,22 +101,29 @@ export function AppSidebar() {
           href="/contact"
           className="text-gray-800 hover:text-gray-600 py-2"
         >
-          <ClerkLoaded>
+          
             {user && <link href="/"></link>}
             {user ? (
               <div className="flex items-center space-x-2">
-                <UserButton width={200} height={200} />
+                <Avatar>
+                  <AvatarImage src={user.photoUrl} />
+                  <AvatarFallback>
+                    {user.fullName}
+                  </AvatarFallback>
+                </Avatar>
+                {/* <UserButton width={200} height={200} /> */}
                 <div className="text-xs text-customYellow font-bold">
                   {user.fullName}
                 </div>
               </div>
             ) : (
-              <SignInButton
-                className="bg-customYellow text-white p-2 rounded font-bold text-lg"
-                mode="modal"
-              />
+              <Button
+                                className="bg-customYellow hover:bg-customYellow/85 cursor-pointer text-white font-bold rounded py-2 px-4"
+                                onClick={() => router.push("/signin")}
+                              >
+                                 SignIn
+                              </Button>
             )}
-          </ClerkLoaded>
         </Link>
       </SidebarFooter>
     </Sidebar>

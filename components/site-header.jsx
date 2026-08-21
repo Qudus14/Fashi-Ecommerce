@@ -3,13 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useCartStore } from "@/store";
-import { SignInButton, useAuth } from "@clerk/nextjs";
 import { Menu, Package, Search, ShoppingCartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { logo } from "../public/img/logo.png";
+import { useAuth } from "./service/auth-context";
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar();
@@ -17,7 +17,7 @@ export function SiteHeader() {
   const router = useRouter();
   const cart = useCartStore((state) => state.cart);
   const [itemCount, setItemCount] = useState(0);
-  const { isSignedIn } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const count = cart.reduce((total, item) => total + item.quantity, 0);
@@ -92,7 +92,7 @@ export function SiteHeader() {
               </Link>
             </li>
             <li className="relative group flex items-center">
-              {isSignedIn ? (
+              {isAuthenticated ? (
                 <Link
                   href="/orders"
                   className="flex border border-customYellow space-x-2 bg-customYellow hover:bg-customYellow/85 text-red font-bold py-2 px-4 rounded"
@@ -101,10 +101,12 @@ export function SiteHeader() {
                   <span className="text-white">Orders</span>
                 </Link>
               ) : (
-                <SignInButton
+                <Button
                   className="bg-customYellow hover:bg-customYellow/85 cursor-pointer text-white font-bold rounded py-2 px-4"
-                  mode="modal"
-                />
+                  onClick={() => router.push("/login")}
+                >
+                   SignIn
+                </Button>
               )}
             </li>
           </ul>

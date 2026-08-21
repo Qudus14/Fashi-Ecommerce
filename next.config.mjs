@@ -24,6 +24,8 @@ const nextConfig = {
       "pisces.bbystatic.com",
       "cb.scene7.com",
       "www.staples-3p.com",
+      "live.templately.com",
+      "res.cloudinary.com",
     ],
   },
 };

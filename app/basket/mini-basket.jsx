@@ -4,7 +4,6 @@ import { useCartStore } from "@/store"
 import { getCartTotal, groupByProduct } from "@/lib/util"
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
-import { SignInButton, useAuth, useUser } from "@clerk/nextjs"
 import { loadStripe } from "@stripe/stripe-js"
 import { Loader } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -17,9 +16,7 @@ export default function Basket() {
   const cart = useCartStore((state) => state.cart)
   const groupedCart = groupByProduct(cart)
   const basketTotal = getCartTotal(groupedCart)
-  const { isSignedIn } = useAuth()
-  const { user } = useUser()
-  const [isCLient, setIsClient] = useState(false)
+  const {isCLient, setIsClient} = useState(false)
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const orderSummaryRef = useRef(null)

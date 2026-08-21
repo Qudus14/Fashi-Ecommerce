@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ArrowRight, ShoppingBag, X } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -16,221 +16,423 @@ import { useCartStore } from "@/store";
 import AddToCart from "../Public/AddToCart";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "../Public/LoadingPage";
-import requests from "@/lib/requests";
-import axiosInstance from "@/Axios";
-import CarouselLoading from "../loading/carouselLoading";
-import person from "../../public/img/products/man-large.jpg";
 import { StarFilledIcon } from "@sanity/icons";
+import { productApi } from "../service/api";
 
-const categories = ["Electronics", "Watches", "Shoes", "Sports"];
+// ========== TARGET CATEGORIES ==========
+const TARGET_CATEGORIES = [
+  "Watches",
+  "Electronics",
+  "Sports & Outdoors",
+  "Phones & Tablets",
+];
+
+// ========== SUB-COMPONENTS ==========
+
+// Product Card Skeleton
+const ProductCardSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="bg-gray-200 rounded-xl aspect-[4/5] relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer" />
+    </div>
+    <div className="mt-3 space-y-2">
+      <div className="h-3 bg-gray-200 rounded w-1/4" />
+      <div className="h-5 bg-gray-200 rounded w-3/4" />
+      <div className="flex items-center justify-between">
+        <div className="h-4 bg-gray-200 rounded w-1/3" />
+        <div className="h-4 bg-gray-200 rounded w-1/5" />
+      </div>
+    </div>
+  </div>
+);
+
+// Quick View Modal
+const QuickViewModal = ({ product, onClose }) => {
+  if (!product) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative animate-in slide-in-from-bottom-4 duration-300">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors z-10"
+          aria-label="Close quick view"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="grid md:grid-cols-2 gap-8 p-6">
+          <div className="relative aspect-square bg-gray-50 rounded-xl overflow-hidden">
+            <Image
+              src={product.imageUrls?.[0] || "/placeholder.jpg"}
+              alt={product.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <span className="text-sm text-customYellow font-medium">
+              {product.categories?.[0] || "Product"}
+            </span>
+            <h2 className="text-2xl font-bold text-gray-900 mt-2">
+              {product.name}
+            </h2>
+
+            <div className="flex items-center gap-3 mt-2">
+              <div className="flex items-center gap-1">
+                <StarFilledIcon className="w-5 h-5 text-yellow-400" />
+                <span className="font-semibold">4.5</span>
+              </div>
+              <span className="text-gray-400 text-sm">(0 reviews)</span>
+            </div>
+
+            <div className="flex items-baseline gap-3 mt-4">
+              <span className="text-3xl font-bold text-gray-900">
+                ₦{product.price?.toLocaleString()}
+              </span>
+            </div>
+
+            <p className="text-gray-600 mt-4 leading-relaxed">
+              {product.description ||
+                "Discover this stunning piece from our collection. Crafted with premium materials for lasting comfort and style."}
+            </p>
+
+            <div className="mt-6 space-y-3">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="font-medium">Availability:</span>
+                <span className="text-green-600">In Stock</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="font-medium">Category:</span>
+                <span>{product.categories?.join(", ") || "General"}</span>
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <AddToCart product={product} className="flex-1" />
+              <button className="flex-1 px-6 py-3 border-2 border-gray-200 rounded-full hover:border-customYellow hover:bg-customYellow hover:text-white transition-all font-medium">
+                Add to Wishlist
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ========== MAIN COMPONENT ==========
 
 const MenBanner = () => {
   const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState("Electronics");
-  const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { cart } = useCartStore();
+  const [quickViewProduct, setQuickViewProduct] = useState(null);
+  const carouselRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleClick = () => {
-    router.push(`/search?q=${encodeURIComponent("Men's")}`);
-  };
-
+  // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const url = requests.fetchWears(activeCategory);
-        const response = await axiosInstance.get(url);
+        const response = await productApi.getProduct();
 
-        console.log("API Response:", response.data);
-
-        if (response.data?.status === "OK" && response.data?.data?.products) {
-          setProducts(response.data.data.products);
+        if (response.success) {
+          setAllProducts(response.data);
         } else {
-          setError(`Failed to fetch men's product for ${activeCategory}`);
+          setError("Failed to fetch products");
         }
       } catch (err) {
         console.error(err);
-        setError("Men's products temporarily unavailable");
+        setError("Products temporarily unavailable");
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [activeCategory]);
+  }, []);
 
-  const handleCategoryClick = (category) => {
-    setActiveCategory(category);
+  // Filter and randomize products
+  useEffect(() => {
+    if (allProducts.length > 0) {
+      const filtered = allProducts.filter((item) => {
+        const product = item?.product || item;
+        const categories = product.categories || [];
+        return categories.some((cat) => TARGET_CATEGORIES.includes(cat));
+      });
+
+      const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+      setFilteredProducts(shuffled);
+    }
+  }, [allProducts]);
+
+  // Reset carousel when filtered products change
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollTo(0);
+    }
+  }, [filteredProducts]);
+
+  const handleViewAll = () => {
+    router.push(`/search?q=${encodeURIComponent("Products")}`);
   };
 
-  return (
-    <section className="md:py-16 py-4 md:px-10 px-4">
-      <div className="container mx-auto">
-        <div className="flex md:ml-12 ml-0 mb-4">
-          <div className="ml-8 md:ml-36 lg:ml-48 justify-self-center">
-            <ul className="flex items-center space-x-4">
-              {categories.map((category, index) => (
-                <li
-                  key={index}
-                  className={`cursor-pointer ${
-                    category === activeCategory
-                      ? "text-customYellow font-bold text-xl"
-                      : "font-semibold text-gray-600 text-xl hover:text-customYellow"
-                  }`}
-                  onClick={() => handleCategoryClick(category)}
+  // Render product card - FIXED for mobile full width
+  const renderProductCard = useCallback(
+    (item, index) => {
+      const product = item?.product || item;
+
+      const imageUrl = product.imageUrls?.find(
+        (url) => typeof url === "string" && url.trim() !== "",
+      );
+
+      if (!imageUrl) return null;
+
+      const primaryCategory = product.categories?.[0] || "General";
+      const categoryDisplay =
+        primaryCategory.length > 15
+          ? primaryCategory.substring(0, 14) + "…"
+          : primaryCategory;
+
+      return (
+        <CarouselItem
+          key={product.productId || `${product.name}-${index}`}
+          className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4"
+        >
+          <Card className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full w-full">
+            <CardContent className="p-0 flex-shrink-0 relative">
+              {/* Image Container */}
+              <div className="relative aspect-[4/5] w-full bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden">
+                <Image
+                  src={imageUrl}
+                  alt={product.name || "Product"}
+                  fill
+                  className="object-contain transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                  priority={index < 3}
+                  quality={75}
+                />
+
+                {/* Badge System */}
+                <div className="absolute top-2 left-2 flex flex-col gap-1">
+                  {product.discount_percent && (
+                    <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">
+                      -{product.discount_percent}%
+                    </span>
+                  )}
+                </div>
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => {
+                      if (product?.productId) {
+                        router.push(`/product/${product.productId}`);
+                      }
+                    }}
+                    className="bg-white text-gray-800 px-3 py-1.5 rounded-full text-xs font-medium hover:bg-customYellow hover:text-white transition-all transform -translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+                  >
+                    View
+                  </button>
+                  <button
+                    onClick={() => setQuickViewProduct(product)}
+                    className="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1.5 rounded-full text-xs font-medium hover:bg-customYellow hover:text-white transition-all transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+                  >
+                    Quick View
+                  </button>
+                </div>
+
+                {/* Wishlist Button */}
+                <button
+                  className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:bg-red-50 hover:scale-110"
+                  aria-label="Add to wishlist"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                 >
-                  {category}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+                  <Heart className="w-3.5 h-3.5 text-gray-600 group-hover:text-red-500 transition-colors" />
+                </button>
+              </div>
+            </CardContent>
 
-        <div className="flex flex-wrap -mx-4">
-          <div className="w-full lg:w-2/3 md:px-4 px-3">
-            {loading && <CarouselLoading />}
-
-            {error && <div className="text-center text-red-500">{error}</div>}
-
-            {!loading && !error && (
-              <Carousel
-                plugins={[
-                  Autoplay({
-                    delay: 2000,
-                    loop: true,
-                  }),
-                ]}
-                className="w-full"
-              >
-                <CarouselContent className="ml-2 md:ml-4">
-                  {products.map((item, index) => {
-                    const product = item?.product || item;
-
-                    const imageUrl = product.product_photos.find(
-                      (url) => typeof url === "string" && url.trim() !== ""
-                    );
-
-                    if (!imageUrl) return null;
-                    return (
-                      <CarouselItem
-                        key={product?.product_id || index}
-                        className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
-                      >
-                        <Card className="bg-gray-300 overflow-hidden rounded-2xl border-gray-200 w-full h-[390px] flex flex-col">
-                          <CardContent className="p-0 flex-shrink-0">
-                            <div className="relative overflow-hidden group">
-                              <div className="relative flex justify-center items-center w-full h-[250px] bg-gray-50 border-b-gray-500 overflow-hidden">
-                                <Image
-                                  src={imageUrl}
-                                  alt={product?.product_title || "Product"}
-                                  width={250}
-                                  height={250}
-                                  className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105 relative"
-                                  sizes="(max-width: 768px) 100vw, 250px"
-                                />
-                                {/* <span className="absolute bg- text-white font-bold text-sm top-2 left-2 px-2 py-1 rounded-full bg-customYellow">
-                                  {product?.discount_percent}
-                                </span> */}
-                              </div>
-
-                              <div className="absolute top-0 right-4 bg-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-full group-hover:translate-y-4">
-                                <Heart className="w-5 h-5 text-gray-600" />
-                              </div>
-
-                              <ul className="absolute bottom-1 left-0 right-0 flex flex-row md:flex-col lg:flex-row justify-center md:space-y-2 lg:space-y-0 space-y-0 space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-full group-hover:translate-y-0">
-                                <li>
-                                  <AddToCart product={product} />
-                                </li>
-
-                                <li
-                                  className="bg-white px-3 py-2 rounded-full text-bold cursor-pointer text-center"
-                                  onClick={() => {
-                                    if (product?.product_id) {
-                                      // Pass the raw string, Next.js will handle the URL safety
-                                      router.push(
-                                        `/product/${product.product_id}`
-                                      );
-                                    } else {
-                                      console.error(
-                                        "No product ID found for this item",
-                                        product
-                                      );
-                                    }
-                                  }}
-                                >
-                                  + Quick View
-                                </li>
-                              </ul>
-                            </div>
-                          </CardContent>
-
-                          <CardFooter className="flex flex-col items-start p-4">
-                            <div className="text-sm font-semibold text-gray-500">
-                              <span className="text-customYellow font-semibold text-sm bg-white p-1 border border-customYellow rounded-xl">
-                                {activeCategory}
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-2 mt-2">
-                              <span className="flex items-center text-sm font-bold">
-                                {product?.product_rating}
-                                <StarFilledIcon
-                                  size={13}
-                                  className="text-customYellow"
-                                />
-                              </span>
-                              <span className="text-gray-700 font-semibold text-xs">
-                                ({product?.product_num_reviews} review)
-                              </span>
-                            </div>
-
-                            <Link
-                              href="#"
-                              className="block font-bold text-gray-900 text-base mb-2 hover:text-customYellow line-clamp-3"
-                            >
-                              {product?.product_title || "Untitled Product"}
-                            </Link>
-                          </CardFooter>
-                        </Card>
-                      </CarouselItem>
-                    );
-                  })}
-                </CarouselContent>
-
-                <CarouselPrevious className="left-4 bg-white/20 border-none text-white hover:bg-customYellow transition-all" />
-                <CarouselNext className="right-4 bg-white/20 border-none text-white hover:bg-customYellow transition-all" />
-              </Carousel>
-            )}
-          </div>
-
-          <div
-            className="lg:block md:hidden hidden w-full lg:w-1/3 mt-4 lg:mt-0 cursor-pointer"
-            onClick={handleClick}
-            onKeyDown={(e) => e.key === "Enter" && handleClick()}
-            tabIndex={0}
-            role="button"
-            aria-label="Discover Men's Collection"
-          >
-            <div className="product-large relative h-[500px] bg-cover bg-center bg-no-repeat cursor-pointer transition-transform duration-300 hover:scale-95 group-hover:opacity-90">
-              <Image
-                src={person}
-                alt="Men's Collection"
-                fill
-                className="object-contain"
-              />
-              <div className="absolute inset-0  flex flex-col justify-center items-center text-white transition-all duration-300 group-hover:bg-opacity-50">
-                <h2 className="text-4xl font-bold mb-4">Men's</h2>
-                <span className="inline-block hover:bg-customYellow bg-white text-black px-6 py-2 rounded-full hover:text-white transition-colors">
-                  Discover More
+            <CardFooter className="flex flex-col items-start p-3 gap-1 bg-white flex-grow">
+              {/* Category Badge */}
+              <div className="w-full">
+                <span
+                  className="inline-block text-[10px] font-medium text-customYellow bg-yellow-50 px-2 py-0.5 rounded-full border border-yellow-200 max-w-full truncate"
+                  title={product.categories?.[0] || "General"}
+                >
+                  {categoryDisplay}
                 </span>
               </div>
+
+              {/* Product Name */}
+              <Link
+                href={`/product/${product.productId}`}
+                className="font-semibold text-gray-800 text-sm hover:text-customYellow transition-colors line-clamp-2 min-h-[2.5rem]"
+              >
+                {product.name || "Untitled Product"}
+              </Link>
+
+              {/* Price & Rating */}
+              <div className="flex items-center justify-between w-full mt-0.5">
+                <span className="text-base font-bold text-gray-900">
+                  ₦{product.price?.toLocaleString()}
+                </span>
+
+                <div className="flex items-center gap-0.5">
+                  <StarFilledIcon className="w-3.5 h-3.5 text-yellow-400" />
+                  <span className="text-xs font-medium text-gray-700">4.5</span>
+                </div>
+              </div>
+
+              {/* Add to Cart Button - Mobile */}
+              <div className="w-full mt-1 md:hidden">
+                <AddToCart
+                  product={product}
+                  className="w-full text-xs py-1.5"
+                />
+              </div>
+            </CardFooter>
+          </Card>
+        </CarouselItem>
+      );
+    },
+    [router],
+  );
+
+  return (
+    <section className="py-8 bg-gradient-to-b from-white to-gray-50/50">
+      <div className="container mx-auto px-4">
+        {/* Section Header - Optional, add your header here */}
+
+        {/* Products Section */}
+        <div className="relative">
+          {/* Loading State */}
+          {loading && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              {[...Array(4)].map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
             </div>
-          </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-12 bg-red-50 rounded-2xl">
+              <h3 className="text-lg font-semibold text-red-600 mb-1">
+                Oops! Something went wrong
+              </h3>
+              <p className="text-sm text-red-500">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-3 px-5 py-1.5 bg-red-500 text-white text-sm rounded-full hover:bg-red-600 transition-colors"
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && filteredProducts.length === 0 && (
+            <div className="text-center py-12 bg-gray-50 rounded-2xl">
+              <div className="inline-block p-4 bg-gray-100 rounded-full mb-4">
+                <ShoppingBag className="w-12 h-12 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-700 mb-1">
+                No Products Found
+              </h3>
+              <p className="text-gray-500 text-sm max-w-md mx-auto">
+                No products available in this collection. Check back soon!
+              </p>
+            </div>
+          )}
+
+          {/* Carousel */}
+          {!loading && !error && filteredProducts.length > 0 && (
+            <div className="relative -mx-4 sm:mx-0">
+              <Carousel
+                ref={carouselRef}
+                plugins={[
+                  Autoplay({
+                    delay: 3000,
+                    stopOnInteraction: true,
+                    stopOnMouseEnter: true,
+                  }),
+                ]}
+                className="w-full overflow-visible"
+                opts={{
+                  align: "start",
+                  loop: true,
+                  skipSnaps: false,
+                  dragFree: false,
+                  slidesToScroll: 1,
+                  containScroll: "trimSnaps",
+                }}
+                setApi={(api) => {
+                  if (api) {
+                    api.on("select", () => {
+                      setActiveIndex(api.selectedScrollSnap());
+                    });
+                  }
+                }}
+              >
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {filteredProducts.map((item, index) =>
+                    renderProductCard(item, index),
+                  )}
+                </CarouselContent>
+
+                {/* Navigation Controls */}
+                {filteredProducts.length > 4 && (
+                  <div className="hidden md:block">
+                    <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm hover:bg-customYellow hover:text-white border-0 shadow-xl transition-all hover:scale-110" />
+                    <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm hover:bg-customYellow hover:text-white border-0 shadow-xl transition-all hover:scale-110" />
+                  </div>
+                )}
+
+                {/* Mobile Scroll Indicator - FIXED with active state */}
+                {filteredProducts.length > 2 && (
+                  <div className="flex md:hidden justify-center gap-1.5 mt-4">
+                    {filteredProducts
+                      .slice(0, Math.min(5, filteredProducts.length))
+                      .map((_, idx) => (
+                        <button
+                          key={idx}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            idx === activeIndex
+                              ? "w-6 bg-customYellow"
+                              : "w-1.5 bg-gray-300"
+                          }`}
+                          aria-label={`Go to slide ${idx + 1}`}
+                        />
+                      ))}
+                    {filteredProducts.length > 5 && (
+                      <span className="text-xs text-gray-400 ml-1 flex items-center">
+                        +{filteredProducts.length - 5}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Carousel>
+            </div>
+          )}
         </div>
+
+        {/* Quick View Modal */}
+        {quickViewProduct && (
+          <QuickViewModal
+            product={quickViewProduct}
+            onClose={() => setQuickViewProduct(null)}
+          />
+        )}
       </div>
     </section>
   );

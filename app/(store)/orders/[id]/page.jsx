@@ -1,5 +1,4 @@
 import { getOrderById } from "@/lib/getMyOrders";
-import { auth } from "@clerk/nextjs/server";
 import { redirect, notFound } from "next/navigation";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";

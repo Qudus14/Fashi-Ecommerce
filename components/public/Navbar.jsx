@@ -5,7 +5,6 @@ import { ChevronDownIcon } from "lucide-react";
 import { CategorySelectorComponent } from "../ui/category-selector";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ClerkLoaded, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -56,7 +55,7 @@ export default function Navbar() {
         </div>
         <div className="flex items-center h-full">
           <Link href="/contact" className="text-gray-800 hover:text-gray-600">
-            <ClerkLoaded>
+            
               {user && <link href="/"></link>}
               {user ? (
                 <div className="flex items-center space-x-2">
@@ -71,7 +70,7 @@ export default function Navbar() {
                   mode="modal"
                 />
               )}
-            </ClerkLoaded>
+            
           </Link>
         </div>
       </div>
